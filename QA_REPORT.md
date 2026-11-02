@@ -1,5 +1,14 @@
 # QA Report
 
+## Phase 7: About page (2026-11-02)
+
+These were actually run on a production build:
+
+- `npm run lint`, `tsc --noEmit` and `npm run build` are clean.
+- `npm test` passes, including the new `about.test.tsx`. It checks the approved copy and routes, the broker model, that there is no invented history, ranks, branches, awards or stats, that the team is empty by default, that only approved profiles render, and that an NMLS ID appears only when provided.
+- `tests/e2e/smoke.mjs` passes on 13 routes × 5 viewports. It adds About checks: link hrefs, values and qualities, no team section or NMLS ID, and click-through to /#mortgage-solutions and /careers.
+- Lighthouse on /about: mobile 96/100/100/69, desktop 100/100/100/69.
+
 ## Phase 6: Borrower Resources page (2026-11-02)
 
 These were actually run on a production build:

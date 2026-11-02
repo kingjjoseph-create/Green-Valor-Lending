@@ -51,6 +51,10 @@
 
 **Done:** `/resources` with a live mortgage payment calculator (`src/lib/mortgage.ts` and `components/resources/mortgage-calculator.tsx`), eight mortgage-basics accordions, two loan-option cards, a five-step process, a searchable and categorized FAQ (`components/resources/searchable-faq.tsx`), and the CTA. The calculator flag `NEXT_PUBLIC_FEATURE_CALCULATORS` now defaults to on, which also removes the homepage "Coming soon" badge. Review is in `docs/visual-review/RESOURCES_REVIEW.md`.
 
+## Phase 7: About page (2026-11-02)
+
+**Done:** `/about` with the hero, who we are, a prominent mission statement, five values, veteran-owned leadership (reversed GV mark, no military imagery), borrower and loan officer commitments, and the final CTA. Copy is in `src/content/about.ts`. The team section (`components/about/team-section.tsx`, data in `src/content/team.ts`) stays hidden until approved profiles are added. Review is in `docs/visual-review/ABOUT_REVIEW.md`.
+
 **Placeholders to remove before launch** (search `data-placeholder`)
 
 - `PhasePlaceholder` blocks on interior pages

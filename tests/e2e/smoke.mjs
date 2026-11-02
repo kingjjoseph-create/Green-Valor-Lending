@@ -415,6 +415,47 @@ for (const viewport of viewports) {
     }
   }
 
+  // About: links route, five values and qualities render, no team section until profiles are approved.
+  {
+    await page.goto(BASE + "/about");
+    const main = page.locator("main");
+    const aboutLinks = {
+      "Explore borrower resources": "/resources",
+      "Explore careers": "/careers",
+      "Explore Mortgage Solutions": "/#mortgage-solutions",
+      "Join Our Team": "/careers",
+    };
+    for (const [name, href] of Object.entries(aboutLinks)) {
+      const link = main.getByRole("link", { name: new RegExp(`^${name}`) });
+      if ((await link.count()) !== 1)
+        fail(`${viewport.name}: about "${name}" found ${await link.count()} times`);
+      else if ((await link.getAttribute("href")) !== href)
+        fail(`${viewport.name}: about "${name}" -> ${await link.getAttribute("href")}`);
+    }
+    for (const t of ["Integrity", "Service", "Family", "Accountability", "Growth", "Teamwork"]) {
+      if (
+        (await main.getByRole("heading", { name: t, exact: true }).count()) < 1 &&
+        (await main.getByText(t, { exact: true }).count()) < 1
+      )
+        fail(`${viewport.name}: about "${t}" missing`);
+    }
+    if ((await main.getByText("Meet the Team.").count()) !== 0)
+      fail(`${viewport.name}: team section shown without approved profiles`);
+    if (/NMLS ID/.test(await main.innerText())) fail(`${viewport.name}: an NMLS ID is shown on /about`);
+    if (viewport.name === "desktop") {
+      await main.getByRole("link", { name: /^Explore Mortgage Solutions/ }).click();
+      await page
+        .waitForURL(/\/#mortgage-solutions$/)
+        .catch(() => fail("about solutions CTA did not navigate"));
+      await page.goto(BASE + "/about");
+      await page
+        .locator("main")
+        .getByRole("link", { name: /^Join Our Team/ })
+        .click();
+      await page.waitForURL("**/careers").catch(() => fail("about Join Our Team did not navigate"));
+    }
+  }
+
   if (errors.length) fail(`${viewport.name}: console errors: ${[...new Set(errors)].join(" | ")}`);
   await context.close();
 }
