@@ -8,6 +8,21 @@
 4. Keep `NEXT_PUBLIC_ALLOW_INDEXING=false` on Preview and on Production until launch sign-off.
 5. Deploy. Every pull request gets a Preview deployment.
 
+## Get Started inquiries (/get-started)
+
+The four-step wizard posts to `/api/inquiry`. It is a preliminary lead intake, not a loan application.
+
+| Variable                                 | Purpose                                                                                                                                                                                                                  |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `INQUIRY_WEBHOOK_URL`                    | CRM endpoint. Receives a JSON `mortgage_inquiry` record (`category: "borrower_lead"`) with `classification` (goal, product interest, transaction, occupancy, follow-up priority), `property`, `financing` and `contact`. |
+| `INQUIRY_WEBHOOK_SECRET`                 | Optional HMAC signature, same format as the other webhooks.                                                                                                                                                              |
+| `INQUIRY_EMAIL_FROM`, `INQUIRY_EMAIL_TO` | Email notification through Resend (`RESEND_API_KEY`). Fall back to the contact settings.                                                                                                                                 |
+| `NEXT_PUBLIC_BORROWER_APPLICATION_URL`   | Approved ARIVE borrower portal (https). Shown on the confirmation only when set.                                                                                                                                         |
+
+- Server order: validate, spam checks (honeypot, minimum fill time, optional Turnstile), classify, deliver/notify, then answer. `{ ok: true }` means at least one channel accepted the inquiry; the confirmation is shown only then. If one channel fails and another succeeds, the failure is logged by channel name (no applicant data).
+- Florida only: any other state is rejected on the client and the server with an explanation.
+- Duplicate submissions within 10 minutes are acknowledged once, not delivered twice. Per-IP rate limit: 5 per 10 minutes per instance.
+
 ## Contact form (/contact)
 
 The contact form posts to `/api/contact`. Configure at least one delivery channel as **server-only** variables:
@@ -47,6 +62,7 @@ The careers form posts to its own endpoint, `/api/recruitment`, which is separat
 
 - [ ] All items in COMPLIANCE_REVIEW.md resolved
 - [ ] No `data-placeholder` elements remain
+- [ ] Get Started delivery configured, a test inquiry received, and the ARIVE link verified
 - [ ] Contact delivery configured and a test message received in the right inbox
 - [ ] Recruitment delivery configured and a test inquiry received end to end
 - [ ] Official logos and favicon in place

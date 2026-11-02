@@ -50,10 +50,6 @@ export const CONTACT_FIELD_ORDER: ContactField[] = [
 
 /** Honeypot field: hidden from people; bots fill it. */
 export const CONTACT_HONEYPOT = "website";
-/** Submissions faster than this after the form rendered are treated as automated. */
-export const MIN_FILL_MS = 3000;
-/** Forms older than this must be reloaded (stale or replayed). */
-export const MAX_FORM_AGE_MS = 24 * 60 * 60 * 1000;
 
 export const CAREER_REASON = "career" as const;
 
