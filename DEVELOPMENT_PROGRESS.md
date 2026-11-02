@@ -35,9 +35,13 @@
 - `/styleguide` component gallery, off by default (404) and never in the sitemap.
 - All pages now use PageHero with breadcrumbs.
 
+## Phase 3: Homepage (2026-11-02)
+
+**Done:** all nine homepage sections (hero, Who We Are, Mortgage Solutions, Why Green Valor, How It Works, Borrower Education, Loan Officer Support, Recruitment, Final CTA). Copy lives in `src/content/home.ts`; page-specific components are in `src/components/home/`. ProcessTimeline gained optional step icons. Entrance motion is now movement-only. CTAButton labels wrap on narrow screens. Visual review and Lighthouse reports are in `docs/visual-review/`.
+
 **Placeholders to remove before launch** (search `data-placeholder`)
 
-- `PhasePlaceholder` blocks on every interior page and the home page
+- `PhasePlaceholder` blocks on interior pages
 - Decorative image panels (`data-placeholder="image"`) until licensed photography is added
 
 ## Needed from Green Valor
@@ -53,7 +57,6 @@
 
 ## Next phases (proposed)
 
-- **Phase 3:** Home page content
 - **Phase 4:** Residential Loans, Non-QM, Resources
 - **Phase 5:** About, Careers, Contact, Get Started; forms + CRM integration
 - **Phase 6:** Legal page content, calculators (illustrative, no rates), final QA, launch prep

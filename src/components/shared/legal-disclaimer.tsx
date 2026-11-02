@@ -9,6 +9,8 @@ type LegalDisclaimerProps = {
   /** Page-specific fine print, rendered after the standard blocks. */
   children?: React.ReactNode;
   title?: string;
+  /** Accessible name for the region; must be unique on the page (default "Disclosures"). */
+  label?: string;
   /** "plain" for running fine print; "boxed" for a bordered note inside page content. */
   variant?: "plain" | "boxed";
   className?: string;
@@ -19,12 +21,13 @@ export function LegalDisclaimer({
   include = [],
   children,
   title,
+  label,
   variant = "plain",
   className,
 }: LegalDisclaimerProps) {
   return (
     <aside
-      aria-label={title ?? "Disclosures"}
+      aria-label={label ?? title ?? "Disclosures"}
       className={cn(
         "space-y-3 type-legal text-muted-foreground",
         variant === "boxed" && "rounded-lg border border-border bg-surface-alt/60 p-5 sm:p-6",

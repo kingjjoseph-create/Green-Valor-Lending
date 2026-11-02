@@ -26,7 +26,13 @@ export function CTAButton({
 }: CTAButtonProps) {
   const external = /^https?:\/\//.test(href);
   const showArrow = arrow ?? !external;
-  const classes = cn(buttonVariants({ variant, size }), className);
+  // CTAs may hold longer labels: allow wrapping on narrow screens instead of overflowing.
+  const classes = cn(
+    buttonVariants({ variant, size }),
+    "h-auto max-w-full py-3 text-center leading-snug whitespace-normal",
+    size === "lg" ? "min-h-12" : "min-h-11",
+    className,
+  );
   const icon = external ? (
     <ExternalLink aria-hidden="true" />
   ) : showArrow ? (

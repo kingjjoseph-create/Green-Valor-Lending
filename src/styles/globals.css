@@ -236,11 +236,26 @@
  * Section entrance: CSS scroll-driven animation, no JavaScript. Browsers
  * without animation-timeline support simply show the content.
  */
+/*
+ * Movement only, no opacity change: text is never rendered at reduced
+ * contrast, even mid-animation or for content resting at the fold.
+ * The range ends a fixed 160px after a section starts entering the viewport,
+ * so it settles after a short scroll regardless of section height.
+ */
+@keyframes gv-reveal-up {
+  from {
+    transform: translateY(28px);
+  }
+  to {
+    transform: none;
+  }
+}
+
 @supports (animation-timeline: view()) {
   .gv-reveal {
-    animation: gv-fade-up linear both;
+    animation: gv-reveal-up linear both;
     animation-timeline: view();
-    animation-range: entry 0% entry 35%;
+    animation-range: entry 0% entry 160px;
   }
 }
 

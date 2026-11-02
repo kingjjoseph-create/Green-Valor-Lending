@@ -43,7 +43,7 @@ export function ResponsiveImage({
           alt={alt ?? image.alt}
           fill
           sizes={sizes}
-          priority={priority}
+          preload={priority}
           className="object-cover"
         />
       ) : (

@@ -36,7 +36,7 @@ export function Logo({
       alt={link ? "" : company.displayName}
       width={asset.width}
       height={asset.height}
-      priority={priority}
+      preload={priority}
       sizes={`${Math.ceil((height * asset.width) / asset.height)}px`}
       className={cn("w-auto max-w-none", imageClassName)}
       style={{ height }}
