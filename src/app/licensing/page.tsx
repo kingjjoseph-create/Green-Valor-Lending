@@ -1,9 +1,9 @@
-import { PageIntro } from "@/components/layout/page-intro";
+import { PageHero } from "@/components/layout/page-hero";
 import { PhasePlaceholder } from "@/components/layout/phase-placeholder";
 import { pageMetadata } from "@/lib/metadata";
 
 export const metadata = pageMetadata({
-  title: "Licensing & Disclosures",
+  title: "Licensing",
   description: "Licensing information and required disclosures for Green Valor Lending LLC.",
   path: "/licensing",
 });
@@ -11,7 +11,8 @@ export const metadata = pageMetadata({
 export default function Page() {
   return (
     <>
-      <PageIntro
+      <PageHero
+        breadcrumbs={[{ title: "Licensing", href: "/licensing" }]}
         eyebrow="Legal"
         title="Licensing & Disclosures"
         description="Licensing information and required disclosures for Green Valor Lending LLC."

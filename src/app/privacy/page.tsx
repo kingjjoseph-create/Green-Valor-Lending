@@ -1,4 +1,4 @@
-import { PageIntro } from "@/components/layout/page-intro";
+import { PageHero } from "@/components/layout/page-hero";
 import { PhasePlaceholder } from "@/components/layout/phase-placeholder";
 import { pageMetadata } from "@/lib/metadata";
 
@@ -11,7 +11,8 @@ export const metadata = pageMetadata({
 export default function Page() {
   return (
     <>
-      <PageIntro
+      <PageHero
+        breadcrumbs={[{ title: "Privacy Policy", href: "/privacy" }]}
         eyebrow="Legal"
         title="Privacy Policy"
         description="How Green Valor Lending LLC collects, uses, and protects personal information."

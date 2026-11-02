@@ -3,8 +3,8 @@ import { Cormorant_Garamond, Inter } from "next/font/google";
 
 import "@/styles/globals.css";
 import { company } from "@/config/company";
-import { SiteFooter } from "@/components/layout/site-footer";
-import { SiteHeader } from "@/components/layout/site-header";
+import { Footer } from "@/components/layout/footer";
+import { Header } from "@/components/layout/header";
 import { SkipLink } from "@/components/layout/skip-link";
 import { getSiteUrl } from "@/lib/company";
 import { defaultOgImage } from "@/lib/metadata";
@@ -44,11 +44,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="en" className={`${inter.variable} ${cormorant.variable} h-full`}>
       <body className="flex min-h-full flex-col">
         <SkipLink />
-        <SiteHeader />
+        <Header />
         <main id="main-content" tabIndex={-1} className="flex-1 focus:outline-none">
           {children}
         </main>
-        <SiteFooter />
+        <Footer />
       </body>
     </html>
   );

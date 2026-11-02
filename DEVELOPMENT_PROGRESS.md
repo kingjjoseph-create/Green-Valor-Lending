@@ -21,9 +21,24 @@
 - Reversed GV mark (white/gold on green tile) used in the footer and for the Apple touch icon.
 - Default Open Graph image (`public/images/og-default.png`) applied to every page.
 
+## Phase 2: Global layout and shared components (2026-11-02)
+
+**Done**
+
+- Typography scale utilities (`type-hero`, `type-page-title`, `type-section-title`, `type-card-title`, `type-eyebrow`, `type-lead`, `type-body`, `type-support`, `type-legal`). Cormorant Garamond + Inter, self-hosted via `next/font`.
+- Semantic color tokens with a green-surface re-map (`.surface-inverse`). Every pairing is contrast-verified by unit test (`src/config/design-tokens.ts`). Gold text uses AA-safe tints; the focus ring adapts to the surface.
+- Header: horizontal logo, nav (Home, Residential Loans, Non-QM Loans, Resources, About Us, Careers [emphasized], Contact), Get Started visible at every width. Desktop nav from 1280px; below that a hamburger drawer with focus trap, Escape to close, focus return, background scroll lock, and close-on-navigate.
+- Footer: identity, brokerage description, all required links including the new Consumer Complaints page and NMLS Consumer Access. Contact, address, social and NMLS render only when configured. Equal Housing identification is gated behind `NEXT_PUBLIC_EQUAL_HOUSING_APPROVED`.
+- Shared components: Header, Footer, MobileNavigation, PageHero, SectionHeading, CTAButton, CTASection, ServiceCard, FeatureCard, ValueCard, ProcessTimeline, FAQAccordion, FormField, FormStatus, LegalDisclaimer, SectionContainer, ResponsiveImage, Breadcrumbs (with BreadcrumbList JSON-LD).
+- Motion: hero fade-in plus CSS scroll-driven section entrance (no JavaScript), all disabled under `prefers-reduced-motion`.
+- Image system: local-only licensed photo registry with briefs (`src/content/images.ts`, `docs/IMAGE_LICENSES.md`). No photos yet.
+- `/styleguide` component gallery, off by default (404) and never in the sitemap.
+- All pages now use PageHero with breadcrumbs.
+
 **Placeholders to remove before launch** (search `data-placeholder`)
 
 - `PhasePlaceholder` blocks on every interior page and the home page
+- Decorative image panels (`data-placeholder="image"`) until licensed photography is added
 
 ## Needed from Green Valor
 
@@ -32,12 +47,13 @@
 - Company NMLS ID and Florida license number once issued
 - Borrower application URL, scheduling URL, CRM choice
 - Social media URLs
-- Licensed Florida residential photography (or approval to source stock)
+- Licensed photography for the slots in docs/IMAGE_LICENSES.md, or approval to purchase stock (my build environment cannot reach stock photo sites)
+- Compliance approval of Equal Housing Opportunity wording and logo, plus the official EHO logo file
 - Compliance counsel review of disclosures (see COMPLIANCE_REVIEW.md)
 
 ## Next phases (proposed)
 
-- **Phase 2:** Home page and design components (hero photography, value sections, process, education teaser, recruiting band)
-- **Phase 3:** Residential Loans, Non-QM, Resources pages
-- **Phase 4:** About, Careers (loan officer recruiting), Contact, Get Started; forms + CRM integration
-- **Phase 5:** Calculators (illustrative, no rates), legal page content, final QA, launch prep
+- **Phase 3:** Home page content
+- **Phase 4:** Residential Loans, Non-QM, Resources
+- **Phase 5:** About, Careers, Contact, Get Started; forms + CRM integration
+- **Phase 6:** Legal page content, calculators (illustrative, no rates), final QA, launch prep

@@ -17,6 +17,10 @@ describe("company config", () => {
     expect(company.productCategories.map((p) => p.id)).toEqual(["residential", "non-qm"]);
   });
 
+  it("hides Equal Housing identification until approved", () => {
+    expect(company.licensing.equalHousingApproved).toBe(false);
+  });
+
   it("never enables published rates", () => {
     expect(company.features.publishRates).toBe(false);
   });

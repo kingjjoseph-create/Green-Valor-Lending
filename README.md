@@ -37,7 +37,10 @@ npm run dev                  # http://localhost:3000
 - `src/config/features.ts`: feature flags (conservative defaults)
 - `src/config/navigation.ts`: header, footer and legal navigation, plus the route list used by the sitemap and tests
 - `src/config/brand-assets.ts`: official logo registry
+- `src/config/design-tokens.ts`: color tokens and contrast-verified pairings
 - `src/content/disclosures.ts`: draft disclosure language (pending compliance review)
+- `src/content/images.ts`: licensed photography registry (see docs/IMAGE_LICENSES.md)
+- `src/components/{layout,shared,forms}`: global and reusable components; preview them at `/styleguide` with `NEXT_PUBLIC_ENABLE_STYLEGUIDE=true`
 
 See [ARCHITECTURE.md](./ARCHITECTURE.md) for the full structure and conventions.
 
