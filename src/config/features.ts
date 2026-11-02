@@ -17,6 +17,8 @@ export const featureFlags = {
   leadForms: flag(process.env.NEXT_PUBLIC_FEATURE_LEAD_FORMS, false),
   /** Loan officer recruiting application on /careers. */
   careersApplication: flag(process.env.NEXT_PUBLIC_FEATURE_CAREERS_APPLICATION, false),
+  /** Internal component gallery at /styleguide (never indexed). Enable on preview deployments only. */
+  styleguide: flag(process.env.NEXT_PUBLIC_ENABLE_STYLEGUIDE, false),
   /**
    * Rates must never be shown unless sourced from a compliant, live feed with
    * required APR disclosures. There is no such feed; this stays false.

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { isActive } from "@/components/layout/main-nav";
+import { isActive } from "@/lib/navigation";
 
 describe("isActive", () => {
   it("matches exact and nested paths but not prefixes of other words", () => {

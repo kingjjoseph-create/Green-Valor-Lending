@@ -2,34 +2,47 @@
 @import "tw-animate-css";
 
 /*
- * Green Valor Lending design tokens.
- * Brand palette (do not alter):
- *   Primary Green #02331D · Gold #BD870B · Forest Green #14452F
- *   Warm Ivory #F5F0E4 · Charcoal #202824 · White #FFFFFF
- * shadcn/ui semantic tokens are mapped onto the brand palette below so
- * every primitive inherits the brand automatically.
+ * Green Valor Lending design system.
+ * Hex values mirror src/config/design-tokens.ts (verified by unit test,
+ * including WCAG contrast for every pairing the UI uses).
+ *
+ * Brand palette: Primary Green #02331D · Gold #BD870B · Forest Green #14452F
+ *                Warm Ivory #F5F0E4 · Charcoal #202824 · White #FFFFFF
+ *
+ * Readability colors are green, white, charcoal and ivory. Gold is an accent:
+ * fills (charcoal text on top), rules, icons on dark, large display. Gold TEXT
+ * uses the tints gold-deep (on light) and gold-bright (on green).
  */
 
 :root {
+  /* Brand palette */
   --gv-green: #02331d;
   --gv-gold: #bd870b;
   --gv-forest: #14452f;
   --gv-ivory: #f5f0e4;
   --gv-charcoal: #202824;
   --gv-white: #ffffff;
-  /*
-   * Text-only gold tints so small gold labels meet WCAG AA (4.5:1). Brand Gold
-   * #BD870B is used unchanged for fills, rules and large display text.
-   *   gold-deep   #8A6208 on white 5.5:1, on ivory 4.8:1
-   *   gold-bright #C9962A on primary green 5.3:1 (brand gold there is 4.4:1)
-   */
+
+  /* Supporting tints */
   --gv-gold-deep: #8a6208;
   --gv-gold-bright: #c9962a;
+  --gv-muted-text: #4a524e;
+  --gv-border: #e3dccb;
+  --gv-input-border: #8c8676;
+  --gv-error: #b42318;
+  --gv-success: #14452f;
 
   --radius: 0.5rem;
 
+  /* Semantic tokens (light surfaces) */
   --background: var(--gv-white);
   --foreground: var(--gv-charcoal);
+  --heading: var(--gv-green);
+  --surface-alt: var(--gv-ivory);
+  --surface-inverse: var(--gv-green);
+  --on-inverse: var(--gv-white);
+  --on-inverse-muted: color-mix(in srgb, var(--gv-white) 80%, transparent);
+  --eyebrow: var(--gv-gold-deep);
   --card: var(--gv-white);
   --card-foreground: var(--gv-charcoal);
   --popover: var(--gv-white);
@@ -39,15 +52,29 @@
   --secondary: var(--gv-ivory);
   --secondary-foreground: var(--gv-green);
   --muted: var(--gv-ivory);
-  /* 8.0:1 on white, 7.1:1 on ivory. */
-  --muted-foreground: #4a524e;
+  --muted-foreground: var(--gv-muted-text);
   --accent: var(--gv-gold);
-  /* Charcoal on gold is 4.8:1; white on gold is 3.2:1, so never put white text on gold. */
   --accent-foreground: var(--gv-charcoal);
-  --destructive: #b42318;
-  --border: #e3dccb;
-  --input: #d6cdb8;
-  --ring: var(--gv-gold);
+  --destructive: var(--gv-error);
+  --success: var(--gv-success);
+  --border: var(--gv-border);
+  --input: var(--gv-input-border);
+  --ring: var(--gv-gold-deep);
+
+  /* Motion */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Dark (Primary Green) surfaces re-map the semantic tokens. */
+.surface-inverse {
+  --foreground: var(--gv-white);
+  --heading: var(--gv-white);
+  --muted-foreground: var(--on-inverse-muted);
+  --eyebrow: var(--gv-gold-bright);
+  --border: color-mix(in srgb, var(--gv-white) 18%, transparent);
+  --ring: var(--gv-gold-bright);
+  background-color: var(--surface-inverse);
+  color: var(--foreground);
 }
 
 @theme inline {
@@ -61,6 +88,10 @@
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-heading: var(--heading);
+  --color-surface-alt: var(--surface-alt);
+  --color-surface-inverse: var(--surface-inverse);
+  --color-on-inverse: var(--on-inverse);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-popover: var(--popover);
@@ -74,6 +105,7 @@
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
+  --color-success: var(--success);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -87,27 +119,128 @@
   --font-serif: var(--font-cormorant), ui-serif, Georgia, serif;
 }
 
+/*
+ * Typography scale. Use these utilities rather than ad-hoc sizes.
+ *   type-hero          Home/landing hero headline
+ *   type-page-title    Interior page H1
+ *   type-section-title Section H2
+ *   type-card-title    Card / sub-section H3
+ *   type-eyebrow       Small uppercase label above headings (color adapts to surface)
+ *   type-lead          Supporting intro paragraph under a heading
+ *   type-body          Default body copy
+ *   type-support       Secondary / helper copy
+ *   type-legal         Disclosures and fine print (never below 12px)
+ */
+@utility type-hero {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: clamp(2.75rem, 1.6rem + 4.2vw, 5rem);
+  line-height: 1.04;
+  letter-spacing: -0.015em;
+}
+@utility type-page-title {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: clamp(2.375rem, 1.7rem + 2.6vw, 3.75rem);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+}
+@utility type-section-title {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: clamp(2rem, 1.6rem + 1.6vw, 2.875rem);
+  line-height: 1.12;
+  letter-spacing: -0.005em;
+}
+@utility type-card-title {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 1.625rem;
+  line-height: 1.2;
+}
+@utility type-eyebrow {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--eyebrow);
+}
+@utility type-lead {
+  font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);
+  line-height: 1.7;
+}
+@utility type-body {
+  font-size: 1rem;
+  line-height: 1.75;
+}
+@utility type-support {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+@utility type-legal {
+  font-size: 0.75rem;
+  line-height: 1.65;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
   }
   body {
     @apply bg-background font-sans text-foreground antialiased;
   }
   h1,
   h2,
-  h3 {
-    @apply font-serif tracking-tight text-gv-green;
+  h3,
+  h4 {
+    @apply font-serif tracking-tight text-heading;
     text-wrap: balance;
   }
   p {
     text-wrap: pretty;
   }
   :focus-visible {
-    @apply outline-2 outline-offset-2 outline-ring;
+    outline: 2px solid var(--ring);
+    outline-offset: 3px;
+  }
+}
+
+/* ---------- Motion (all disabled under prefers-reduced-motion) ---------- */
+
+@keyframes gv-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* On-load fade for heroes. */
+.gv-fade-in {
+  animation: gv-fade-up 0.8s var(--ease-out-soft) both;
+}
+.gv-fade-in-delay {
+  animation: gv-fade-up 0.8s var(--ease-out-soft) 0.12s both;
+}
+
+/*
+ * Section entrance: CSS scroll-driven animation, no JavaScript. Browsers
+ * without animation-timeline support simply show the content.
+ */
+@supports (animation-timeline: view()) {
+  .gv-reveal {
+    animation: gv-fade-up linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 35%;
   }
 }
 
@@ -118,8 +251,7 @@
   *,
   *::before,
   *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
+    animation: none !important;
     transition-duration: 0.01ms !important;
   }
 }

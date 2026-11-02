@@ -1,5 +1,5 @@
 import { company } from "@/config/company";
-import { PageIntro } from "@/components/layout/page-intro";
+import { PageHero } from "@/components/layout/page-hero";
 import { PhasePlaceholder } from "@/components/layout/phase-placeholder";
 import { pageMetadata } from "@/lib/metadata";
 
@@ -12,7 +12,8 @@ export const metadata = pageMetadata({
 export default function Page() {
   return (
     <>
-      <PageIntro
+      <PageHero
+        breadcrumbs={[{ title: "Contact", href: "/contact" }]}
         eyebrow={company.brand.tagline}
         title="Contact Green Valor Lending"
         description="Reach the Green Valor Lending team with questions about Florida mortgage options."

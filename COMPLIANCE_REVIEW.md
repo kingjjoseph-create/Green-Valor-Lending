@@ -12,19 +12,20 @@
 
 ## Draft language awaiting counsel review (`src/content/disclosures.ts`)
 
-| Key               | Draft text (summary)                                                   | Status |
-| ----------------- | ---------------------------------------------------------------------- | ------ |
-| `brokerStatement` | Broker, not lender; loans placed with and funded by wholesale partners | Draft  |
-| `serviceArea`     | Florida properties only                                                | Draft  |
-| `noCommitment`    | Educational only; not a commitment to lend; subject to lender approval | Draft  |
-| `equalHousing`    | Equal Housing Opportunity; FHA / ECOA                                  | Draft  |
+| Key               | Draft text (summary)                                                   | Status                       |
+| ----------------- | ---------------------------------------------------------------------- | ---------------------------- |
+| `brokerStatement` | Broker, not lender; loans placed with and funded by wholesale partners | Draft                        |
+| `serviceArea`     | Florida properties only                                                | Draft                        |
+| `noCommitment`    | Educational only; not a commitment to lend; subject to lender approval | Draft                        |
+| `equalHousing`    | Equal Housing Opportunity; FHA / ECOA                                  | Draft, hidden until approved |
 
 ## Pre-launch items for counsel / the business
 
 - [ ] Florida OFR mortgage broker business license number and how it must appear
 - [ ] Company NMLS ID and NMLS Consumer Access link format
 - [ ] Whether the site may go live before the NMLS ID is issued (recommend: no public launch / indexing until licensed)
-- [ ] Equal Housing Opportunity logo usage (official logo file needed)
+- [ ] Equal Housing Opportunity: approve wording and logo usage, supply the official logo file, then set `NEXT_PUBLIC_EQUAL_HOUSING_APPROVED=true` (hidden until then, per the business's instruction)
+- [ ] Consumer Complaints page content (Florida OFR complaint process and company contact path)
 - [ ] Individual loan officer NMLS IDs wherever an LO is named
 - [ ] Privacy policy (GLBA, Florida law, cookies/analytics, CRM data handling)
 - [ ] Terms of use
@@ -36,4 +37,5 @@
 ## Safeguards
 
 - `robots.txt` disallows all crawling and pages carry `noindex` until `NEXT_PUBLIC_ALLOW_INDEXING=true`.
+- Photography: only licensed, locally stored images; no remote image hosts allowed (test-enforced). See docs/IMAGE_LICENSES.md.
 - Unit tests assert: FL only, two product categories, `publishRates` false, approved brand lines verbatim, no "guaranteed approval" style phrases, broker statement present.

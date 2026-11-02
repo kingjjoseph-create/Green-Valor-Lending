@@ -58,6 +58,9 @@ export const company = {
   displayName: "Green Valor Lending",
   description:
     "Green Valor Lending is a veteran-owned wholesale mortgage brokerage serving Florida homebuyers and homeowners with residential and Non-QM mortgage options through wholesale lending partners.",
+  /** One-to-two sentence description for the footer and short blurbs. */
+  shortDescription:
+    "A veteran-owned wholesale mortgage brokerage helping Florida borrowers compare residential and Non-QM loan options from wholesale lending partners.",
   businessType: "Wholesale Mortgage Brokerage",
   identity: "Veteran-Owned and Operated",
 
@@ -72,6 +75,11 @@ export const company = {
     nmlsId: env(process.env.NEXT_PUBLIC_COMPANY_NMLS_ID),
     nmlsStatus: "pending" as "pending" | "active",
     nmlsConsumerAccessUrl: "https://www.nmlsconsumeraccess.org/",
+    /**
+     * Equal Housing Opportunity identification renders only once compliance
+     * has approved its wording and logo usage (see COMPLIANCE_REVIEW.md).
+     */
+    equalHousingApproved: process.env.NEXT_PUBLIC_EQUAL_HOUSING_APPROVED?.trim().toLowerCase() === "true",
     /** Brokerage, not a lender. Used in disclosures. */
     entityRole: "mortgage-broker" as const,
   },

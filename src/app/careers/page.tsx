@@ -1,5 +1,5 @@
 import { company } from "@/config/company";
-import { PageIntro } from "@/components/layout/page-intro";
+import { PageHero } from "@/components/layout/page-hero";
 import { PhasePlaceholder } from "@/components/layout/phase-placeholder";
 import { pageMetadata } from "@/lib/metadata";
 
@@ -12,7 +12,8 @@ export const metadata = pageMetadata({
 export default function Page() {
   return (
     <>
-      <PageIntro
+      <PageHero
+        breadcrumbs={[{ title: "Careers", href: "/careers" }]}
         eyebrow={company.brand.recruitmentMessage}
         title="Careers for Loan Officers"
         description="Loan officer opportunities with training, development, and marketing support."

@@ -9,6 +9,9 @@ export const disclosures = {
   serviceArea: `${company.displayName} arranges mortgage loans for properties located in the State of Florida only.`,
   noCommitment:
     "Information on this website is for general educational purposes and is not a commitment to lend or an offer of credit. All loans are subject to the lending partner's credit approval, underwriting guidelines, property eligibility, and program availability. Terms and programs are subject to change without notice.",
+  /** Rendered only when company.licensing.equalHousingApproved is true. */
   equalHousing:
     "Equal Housing Opportunity. We do business in accordance with the Federal Fair Housing Act and the Equal Credit Opportunity Act.",
 } as const;
+
+export type DisclosureKey = keyof typeof disclosures;

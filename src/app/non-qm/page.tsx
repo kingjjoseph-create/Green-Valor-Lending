@@ -1,5 +1,5 @@
 import { company } from "@/config/company";
-import { PageIntro } from "@/components/layout/page-intro";
+import { PageHero } from "@/components/layout/page-hero";
 import { PhasePlaceholder } from "@/components/layout/phase-placeholder";
 import { pageMetadata } from "@/lib/metadata";
 
@@ -13,7 +13,8 @@ export const metadata = pageMetadata({
 export default function Page() {
   return (
     <>
-      <PageIntro
+      <PageHero
+        breadcrumbs={[{ title: "Non-QM Loans", href: "/non-qm" }]}
         eyebrow={company.brand.borrowerMessage}
         title="Non-QM Mortgage Loans"
         description="Alternative documentation mortgage options for Florida borrowers whose income or property does not fit a traditional profile."

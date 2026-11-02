@@ -1,16 +1,20 @@
 export type NavItem = {
   title: string;
   href: string;
-  description?: string;
+  /** Opens an external site in a new tab. */
+  external?: boolean;
+  /** Visually emphasized in the primary nav (e.g. Careers). */
+  emphasis?: boolean;
 };
 
-/** Primary navigation. Mirrors the eight approved pages. */
+/** Primary navigation: simple, no mega menus. */
 export const mainNav: NavItem[] = [
+  { title: "Home", href: "/" },
   { title: "Residential Loans", href: "/residential-loans" },
   { title: "Non-QM Loans", href: "/non-qm" },
   { title: "Resources", href: "/resources" },
-  { title: "About", href: "/about" },
-  { title: "Careers", href: "/careers" },
+  { title: "About Us", href: "/about" },
+  { title: "Careers", href: "/careers", emphasis: true },
   { title: "Contact", href: "/contact" },
 ];
 
@@ -18,20 +22,27 @@ export const primaryCta: NavItem = { title: "Get Started", href: "/get-started" 
 
 /** Supporting legal and licensing pages. */
 export const legalNav: NavItem[] = [
-  { title: "Licensing & Disclosures", href: "/licensing" },
+  { title: "Licensing", href: "/licensing" },
   { title: "Privacy Policy", href: "/privacy" },
   { title: "Terms of Use", href: "/terms" },
   { title: "Accessibility", href: "/accessibility" },
+  { title: "Consumer Complaints", href: "/complaints" },
 ];
+
+export const nmlsConsumerAccess: NavItem = {
+  title: "NMLS Consumer Access",
+  href: "https://www.nmlsconsumeraccess.org/",
+  external: true,
+};
 
 export const footerNav: { heading: string; items: NavItem[] }[] = [
   {
-    heading: "Borrowers",
+    heading: "Mortgage Options",
     items: [
       { title: "Residential Loans", href: "/residential-loans" },
       { title: "Non-QM Loans", href: "/non-qm" },
       { title: "Resources", href: "/resources" },
-      { title: "Get Started", href: "/get-started" },
+      primaryCta,
     ],
   },
   {
@@ -42,13 +53,10 @@ export const footerNav: { heading: string; items: NavItem[] }[] = [
       { title: "Contact", href: "/contact" },
     ],
   },
-  { heading: "Legal", items: legalNav },
+  { heading: "Legal & Licensing", items: [...legalNav, nmlsConsumerAccess] },
 ];
 
 /** Every internal route that must exist. Used by tests and the sitemap. */
-export const allRoutes: string[] = [
-  "/",
-  ...mainNav.map((i) => i.href),
-  primaryCta.href,
-  ...legalNav.map((i) => i.href),
-];
+export const allRoutes: string[] = Array.from(
+  new Set([...mainNav.map((i) => i.href), primaryCta.href, ...legalNav.map((i) => i.href)]),
+);

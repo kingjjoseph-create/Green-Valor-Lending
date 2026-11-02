@@ -1,4 +1,4 @@
-import { PageIntro } from "@/components/layout/page-intro";
+import { PageHero } from "@/components/layout/page-hero";
 import { PhasePlaceholder } from "@/components/layout/phase-placeholder";
 import { pageMetadata } from "@/lib/metadata";
 
@@ -11,7 +11,8 @@ export const metadata = pageMetadata({
 export default function Page() {
   return (
     <>
-      <PageIntro
+      <PageHero
+        breadcrumbs={[{ title: "Terms of Use", href: "/terms" }]}
         eyebrow="Legal"
         title="Terms of Use"
         description="Terms governing use of the Green Valor Lending website."
