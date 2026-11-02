@@ -294,6 +294,57 @@ for (const viewport of viewports) {
     await axe(page, `${viewport.name} /residential-loans (FAQ open)`);
   }
 
+  // Non-QM: CTA targets, programs, process steps, responsive comparison, FAQ accordions.
+  {
+    await page.goto(BASE + "/non-qm");
+    const main = page.locator("main");
+    const nqmLinks = {
+      "Discuss Non-QM Options": "/contact",
+      "Ask about your situation": "/contact",
+      "Explore Your Options": "/get-started",
+    };
+    for (const [name, href] of Object.entries(nqmLinks)) {
+      const link = main.getByRole("link", { name: new RegExp(`^${name}`) });
+      if ((await link.count()) !== 1)
+        fail(`${viewport.name}: non-qm "${name}" found ${await link.count()} times`);
+      else if ((await link.getAttribute("href")) !== href)
+        fail(`${viewport.name}: non-qm "${name}" -> ${await link.getAttribute("href")}`);
+    }
+    for (const t of [
+      "Bank Statement Loans",
+      "DSCR Loans",
+      "1099 Borrower Programs",
+      "Other Alternative Documentation Options",
+    ]) {
+      if ((await main.getByRole("heading", { name: t, exact: true }).count()) !== 1)
+        fail(`${viewport.name}: non-qm heading "${t}" missing`);
+    }
+    if ((await main.locator(`section[aria-labelledby="nqm-process"] ol > li`).count()) !== 5)
+      fail(`${viewport.name}: non-qm should show 5 process steps`);
+    const table = main.getByRole("table");
+    const tableVisible = await table.isVisible();
+    if (viewport.width >= 768 !== tableVisible)
+      fail(`${viewport.name}: comparison table visible=${tableVisible} at ${viewport.width}px`);
+    if (tableVisible) {
+      if ((await table.getByRole("rowheader").count()) !== 5)
+        fail(`${viewport.name}: comparison should have 5 row headers`);
+      if ((await table.getByRole("columnheader").count()) !== 3)
+        fail(`${viewport.name}: comparison should have 3 column headers`);
+    } else if (!(await main.getByRole("list", { name: /compared/ }).isVisible())) {
+      fail(`${viewport.name}: stacked comparison not visible on mobile`);
+    }
+    const details = main.locator("details");
+    if ((await details.count()) !== 6)
+      fail(`${viewport.name}: expected 6 non-qm FAQs, got ${await details.count()}`);
+    const faq = details.nth(4);
+    await faq.locator("summary").focus();
+    await page.keyboard.press("Enter");
+    if (!(await faq.evaluate((d) => d.open))) fail(`${viewport.name}: non-qm FAQ did not open with Enter`);
+    const overflowOpen = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+    if (overflowOpen > 0) fail(`${viewport.name}: non-qm overflow ${overflowOpen}px with FAQ open`);
+    await axe(page, `${viewport.name} /non-qm (FAQ open)`);
+  }
+
   if (errors.length) fail(`${viewport.name}: console errors: ${[...new Set(errors)].join(" | ")}`);
   await context.close();
 }

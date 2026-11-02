@@ -1,5 +1,15 @@
 # QA Report
 
+## Phase 5: Non-QM page (2026-11-02)
+
+These were actually run on a production build:
+
+- `npm run lint`, `tsc --noEmit` and `npm run build` are clean.
+- `npm test`: all pass. This adds `non-qm-content.test.ts` (approved copy, the required clarifications, no thresholds, rates or approval promises, no "no-doc" claims) and `keep-together.test.tsx`.
+- `tests/e2e/smoke.mjs` passes on 13 routes × 5 viewports. It adds Non-QM checks: CTA hrefs, program headings, 5 process steps, table vs. stacked comparison by width, FAQ keyboard toggle, and axe and overflow with an FAQ open.
+- Lighthouse on /non-qm: mobile 96/100/100/69, desktop 100/100/100/69.
+- Details: `docs/visual-review/NON_QM_REVIEW.md`.
+
 ## Phase 4: Residential Loans page (2026-11-02)
 
 These were actually run on a production build:

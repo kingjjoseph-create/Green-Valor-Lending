@@ -94,7 +94,7 @@ describe("content components", () => {
   it("FAQAccordion renders disclosure widgets", () => {
     const { container } = render(<FAQAccordion items={[{ question: "Q1?", answer: "A1" }]} />);
     expect(container.querySelectorAll("details")).toHaveLength(1);
-    expect(screen.getByText("Q1?").tagName).toBe("SUMMARY");
+    expect(screen.getByText("Q1?").closest("summary")).not.toBeNull();
   });
 
   it("ProcessTimeline is an ordered list with step numbers for screen readers", () => {

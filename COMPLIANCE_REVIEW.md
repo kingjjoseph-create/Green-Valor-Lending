@@ -36,6 +36,7 @@
 - [ ] Homepage (`src/content/home.ts`): confirm the example programs (Conventional, FHA, VA, Bank Statement, DSCR, 1099, Alternative Documentation) are available through current wholesale partners. They are presented as "may include" with an availability disclaimer.
 - [ ] Homepage government non-affiliation statement (VA / FHA) wording
 - [ ] Residential page (`src/content/residential.ts`): review program descriptions (Conventional, FHA, VA), the FAQ answers (preapproval, mortgage insurance, closing costs including Florida documentary stamp and intangible taxes, TRID timing), and the VA/FHA/HUD non-affiliation statements. Down-payment amounts and percentages are deliberately left out (Reg Z 1026.24(d) trigger terms).
+- [ ] Non-QM page (`src/content/non-qm.ts`): confirm Bank Statement, DSCR, and 1099 programs are currently available through a wholesale partner before launch, or remove the card. Review the QM/ability-to-repay explanation, the comparison table, and the FAQ answers. The page states no thresholds (scores, ratios, months of statements, down payment, reserves) or rates.
 - [ ] Before listing anything under "Other Residential Options", verify current availability with a wholesale lending partner (`verifiedPrograms` array)
 
 ## Safeguards
