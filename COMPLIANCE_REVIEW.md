@@ -33,6 +33,8 @@
 - [ ] Advertising review of every page under Reg Z / MAP Rule (no trigger terms without required disclosures)
 - [ ] Non-QM product descriptions reviewed against actual wholesale partner availability
 - [ ] Recruiting copy reviewed (no income claims)
+- [ ] Careers page (`src/content/careers.ts`): review the licensing statement for aspiring originators, the "no guarantee of employment, sponsorship or training placement" language, and the growth-card bullets (education, marketing guidance, business development support). Confirm with leadership before adding any compensation, commission, lead, tool, mentorship schedule or reimbursement detail.
+- [ ] Recruitment form: review the consent acknowledgment and confirm the Privacy Policy covers applicant data (purpose, retention, where the webhook/email delivers it). Resume uploads are intentionally omitted until a secure recruiting system is chosen.
 - [ ] Homepage (`src/content/home.ts`): confirm the example programs (Conventional, FHA, VA, Bank Statement, DSCR, 1099, Alternative Documentation) are available through current wholesale partners. They are presented as "may include" with an availability disclaimer.
 - [ ] Homepage government non-affiliation statement (VA / FHA) wording
 - [ ] Residential page (`src/content/residential.ts`): review program descriptions (Conventional, FHA, VA), the FAQ answers (preapproval, mortgage insurance, closing costs including Florida documentary stamp and intangible taxes, TRID timing), and the VA/FHA/HUD non-affiliation statements. Down-payment amounts and percentages are deliberately left out (Reg Z 1026.24(d) trigger terms).
@@ -42,6 +44,8 @@
 - [ ] Before listing anything under "Other Residential Options", verify current availability with a wholesale lending partner (`verifiedPrograms` array)
 
 ## Safeguards
+
+- Recruitment inquiries go only to `/api/recruitment` and are labeled `recruitment_inquiry` / `careers`, never as borrower leads. Server-side validation, same-origin check, size and rate limits, honeypot, no applicant data in logs, and no success message unless delivery is confirmed (test-enforced).
 
 - `robots.txt` disallows all crawling and pages carry `noindex` until `NEXT_PUBLIC_ALLOW_INDEXING=true`.
 - Photography: only licensed, locally stored images; no remote image hosts allowed (test-enforced). See docs/IMAGE_LICENSES.md.

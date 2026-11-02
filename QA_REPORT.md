@@ -1,5 +1,19 @@
 # QA Report
 
+## Phase 8: Careers & Recruitment page (2026-11-02)
+
+These were actually run on a production build:
+
+- `npm run lint`, `tsc --noEmit` and `npm run build` are clean.
+- `npm test` passes (183 tests). New files:
+  - `recruitment-schema.test.ts`: empty submission rejected, invalid emails rejected, NMLS ID optional but numeric, phone, pathway and select values, consent, length limits, control characters.
+  - `recruitment-api.test.ts` (mocked fetch): 503 when unconfigured, 400 for empty or invalid input, 200 only after the webhook accepts a signed `recruitment_inquiry` record, 502 when delivery fails or the receiver is unreachable, Resend email payload, one-of-two channels, honeypot, 403 cross-origin, 415, 413, malformed JSON, 429 rate limit, no applicant data in logs, HTML escaped in email.
+  - `recruitment-form.test.tsx`: required fields present, no file upload or mortgage fields, NMLS optional, mobile input types, empty and invalid-email submissions blocked before any request, pathway preselection, success only after an ok response, error (never success) on 503, 502, 500, 429, a non-JSON 200 and network failure, entries kept for retry.
+  - `careers-content.test.ts`: approved copy, cards, values, steps and CTA targets; military welcome but not required; licensing note; no compensation, commission, leads, reimbursements, tools, schedules, benefits or guarantees.
+- `tests/e2e/smoke.mjs` passes on 13 routes × 5 viewports. Careers checks: CTA hrefs and targets, hero CTA scrolls to the form, both pathway CTAs and a direct `?pathway=` visit preselect the category, empty and invalid-email submissions rejected with no request sent, error summary focused, NMLS not required, no file or mortgage fields, inputs at least 16px and controls at least 44px tall, no overflow, axe with errors shown.
+- `tests/e2e/careers-submit.mjs` passes against `next start` with `RECRUITMENT_WEBHOOK_URL` pointing to a local mock receiver, on a mobile viewport: a valid inquiry is delivered as a `recruitment_inquiry` record and only then shows success; with the receiver failing, the form shows an error, keeps the entries, and records nothing.
+- Lighthouse on /careers: mobile 98/100/100/69, desktop 100/100/100/69.
+
 ## Phase 7: About page (2026-11-02)
 
 These were actually run on a production build:

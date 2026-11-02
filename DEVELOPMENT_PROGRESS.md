@@ -55,6 +55,12 @@
 
 **Done:** `/about` with the hero, who we are, a prominent mission statement, five values, veteran-owned leadership (reversed GV mark, no military imagery), borrower and loan officer commitments, and the final CTA. Copy is in `src/content/about.ts`. The team section (`components/about/team-section.tsx`, data in `src/content/team.ts`) stays hidden until approved profiles are added. Review is in `docs/visual-review/ABOUT_REVIEW.md`.
 
+## Phase 8: Careers & Recruitment page (2026-11-02)
+
+**Done:** `/careers` with the green hero (reversed GV mark until a licensed workplace photo is added to the `careersHero` slot), four audience cards with the "military experience is welcome, but not required" note, three growth cards, the seven-value standard grid, two career pathways, the culture section, the recruitment inquiry form, the four-step process, and the final CTA. Copy is in `src/content/careers.ts`.
+
+The form (`components/careers/recruitment-form.tsx`) posts to a dedicated endpoint, `POST /api/recruitment`, that is separate from any borrower flow. Validation is shared between client and server (`src/lib/recruitment/schema.ts`). Delivery (`src/lib/recruitment/deliver.ts`) goes to a signed webhook and/or email through Resend, configured with server-only variables (see DEPLOYMENT.md). With nothing configured the form says online inquiries are unavailable; it never shows a false success. There is no resume upload. The pathway CTAs link to `/careers?pathway=licensed#apply` and `?pathway=aspiring#apply`, which preselect the form. `NEXT_PUBLIC_FEATURE_CAREERS_APPLICATION` now defaults to on. Review is in `docs/visual-review/CAREERS_REVIEW.md`.
+
 **Placeholders to remove before launch** (search `data-placeholder`)
 
 - `PhasePlaceholder` blocks on interior pages
@@ -63,6 +69,7 @@
 ## Needed from Green Valor
 
 - Optional: SVG versions of the logos for the sharpest rendering
+- Recruitment delivery: a recruiting CRM/ATS webhook URL, or a Resend account with a verified sending domain and the recruiting inbox
 - Phone, email, recruiting email, office address (if publishing one)
 - Company NMLS ID and Florida license number once issued
 - Borrower application URL, scheduling URL, CRM choice

@@ -15,8 +15,13 @@ export const featureFlags = {
   calculators: flag(process.env.NEXT_PUBLIC_FEATURE_CALCULATORS, true),
   /** Lead capture forms. Require a configured CRM before enabling. */
   leadForms: flag(process.env.NEXT_PUBLIC_FEATURE_LEAD_FORMS, false),
-  /** Loan officer recruiting application on /careers. */
-  careersApplication: flag(process.env.NEXT_PUBLIC_FEATURE_CAREERS_APPLICATION, false),
+  /**
+   * Recruitment inquiry form on /careers. On by default: submissions only
+   * succeed when server-side delivery (webhook or email) is configured, so an
+   * unconfigured deployment shows an honest "not available" error, never a
+   * false success. Set to "false" to hide the form entirely.
+   */
+  careersApplication: flag(process.env.NEXT_PUBLIC_FEATURE_CAREERS_APPLICATION, true),
   /** Internal component gallery at /styleguide (never indexed). Enable on preview deployments only. */
   styleguide: flag(process.env.NEXT_PUBLIC_ENABLE_STYLEGUIDE, false),
   /**
