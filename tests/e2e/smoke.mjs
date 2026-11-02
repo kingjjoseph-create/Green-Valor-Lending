@@ -113,6 +113,31 @@ for (const viewport of viewports) {
 
   await page.goto(BASE + "/");
 
+  // Homepage CTAs point where they should and every image has an alt attribute.
+  const expectedLinks = {
+    "Explore Loan Options": "#mortgage-solutions",
+    "Explore Careers": "/careers",
+    "Learn more about us": "/about",
+    "Explore Residential Loans": "/residential-loans",
+    "Explore Non-QM Loans": "/non-qm",
+    "Explore Resources": "/resources",
+    "Discover the Green Valor Difference": "/careers",
+    "Explore Career Opportunities": "/careers",
+    "Join Our Team": "/careers",
+  };
+  const main = page.locator("main");
+  for (const [name, href] of Object.entries(expectedLinks)) {
+    const link = main.getByRole("link", { name: new RegExp(`^${name}`) });
+    if ((await link.count()) !== 1)
+      fail(`${viewport.name}: home link "${name}" found ${await link.count()} times`);
+    else if ((await link.getAttribute("href")) !== href)
+      fail(`${viewport.name}: "${name}" -> ${await link.getAttribute("href")}`);
+  }
+  if ((await page.locator("#mortgage-solutions").count()) !== 1)
+    fail(`${viewport.name}: #mortgage-solutions anchor missing`);
+  const missingAlt = await page.locator("img:not([alt])").count();
+  if (missingAlt) fail(`${viewport.name}: ${missingAlt} image(s) without alt`);
+
   // Logo: official horizontal file, aspect ratio preserved, sensible size.
   const logo = await page
     .locator("header img")
@@ -205,6 +230,21 @@ for (const viewport of viewports) {
     await dialog
       .waitFor({ state: "hidden", timeout: 2000 })
       .catch(() => fail(`${viewport.name}: drawer did not close after navigation`));
+  }
+
+  if (viewport.name === "desktop") {
+    await page.goto(BASE + "/");
+    await page
+      .locator("main")
+      .getByRole("link", { name: /^Explore Career Opportunities/ })
+      .click();
+    await page.waitForURL("**/careers").catch(() => fail("home careers CTA did not open /careers"));
+    await page.goto(BASE + "/");
+    await page
+      .locator("main")
+      .getByRole("link", { name: /^Explore Residential Loans/ })
+      .click();
+    await page.waitForURL("**/residential-loans").catch(() => fail("residential card CTA did not navigate"));
   }
 
   if (errors.length) fail(`${viewport.name}: console errors: ${[...new Set(errors)].join(" | ")}`);

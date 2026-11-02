@@ -33,9 +33,12 @@
 - [ ] Advertising review of every page under Reg Z / MAP Rule (no trigger terms without required disclosures)
 - [ ] Non-QM product descriptions reviewed against actual wholesale partner availability
 - [ ] Recruiting copy reviewed (no income claims)
+- [ ] Homepage (`src/content/home.ts`): confirm the example programs (Conventional, FHA, VA, Bank Statement, DSCR, 1099, Alternative Documentation) are available through current wholesale partners. They are presented as "may include" with an availability disclaimer.
+- [ ] Homepage government non-affiliation statement (VA / FHA) wording
 
 ## Safeguards
 
 - `robots.txt` disallows all crawling and pages carry `noindex` until `NEXT_PUBLIC_ALLOW_INDEXING=true`.
 - Photography: only licensed, locally stored images; no remote image hosts allowed (test-enforced). See docs/IMAGE_LICENSES.md.
+- Homepage copy is test-checked for rates/APR, guarantees, pre-approval, "we fund/approve/underwrite/lend", superlatives, statistics and testimonials, and must keep the "may include" label, the availability disclaimer, and "the lender makes the credit decision".
 - Unit tests assert: FL only, two product categories, `publishRates` false, approved brand lines verbatim, no "guaranteed approval" style phrases, broker statement present.
