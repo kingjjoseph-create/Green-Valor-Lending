@@ -67,6 +67,12 @@ The form (`components/careers/recruitment-form.tsx`) posts to a dedicated endpoi
 
 The form (`components/contact/contact-form.tsx`) posts to `POST /api/contact`. Validation is shared (`src/lib/contact/schema.ts`). Spam protection (`src/lib/contact/spam.ts`) uses a honeypot, a minimum fill time, optional Cloudflare Turnstile and duplicate suppression, with a per-IP rate limit. Delivery (`src/lib/contact/deliver.ts`) goes to a signed CRM webhook and/or Resend email, classified as `mortgage_inquiry` or `general_inquiry`, with optional separate mortgage inbox. "Career Opportunity" sends visitors to the Careers recruitment form. Shared request guards and delivery helpers now live in `src/lib/forms/`, and the recruitment endpoint uses them too. Review is in `docs/visual-review/CONTACT_REVIEW.md`.
 
+## Phase 10: Get Started page (2026-11-02)
+
+**Done:** `/get-started` with the hero, a four-step mortgage inquiry wizard and a "What to expect" panel. Copy is in `src/content/get-started.ts`. This is a lead intake form, not a loan application: it never asks for a Social Security number, date of birth, account numbers, tax returns, paystubs, a driver's license or a credit report, and the server rejects free text that looks like an SSN or account/card number.
+
+The wizard (`components/get-started/inquiry-wizard.tsx`) has a progress indicator, Back/Next that keep every entry, per-step validation that focuses the first error, Florida preselected (any other state shows the Florida-only notice and blocks the step), dollar formatting, a leave-page warning while entries are unsaved, a 20-second timeout and in-flight guard against duplicate submissions. It posts to `POST /api/inquiry`, which validates on the server, checks the honeypot, fill time, optional Turnstile and rate limit, classifies the lead (goal, product interest, transaction, occupancy, follow-up window), then delivers to a signed CRM webhook and/or Resend email (`src/lib/inquiry/`). The approved confirmation appears only after the server accepts the inquiry. The "Start Your Secure Mortgage Application" button appears only when an https ARIVE URL is set in `NEXT_PUBLIC_BORROWER_APPLICATION_URL`. Spam helpers shared with Contact moved to `src/lib/forms/spam.ts`. Review is in `docs/visual-review/GET_STARTED_REVIEW.md`.
+
 **Placeholders to remove before launch** (search `data-placeholder`)
 
 - `PhasePlaceholder` blocks on interior pages
@@ -76,6 +82,8 @@ The form (`components/contact/contact-form.tsx`) posts to `POST /api/contact`. V
 
 - Optional: SVG versions of the logos for the sharpest rendering
 - Recruitment delivery: a recruiting CRM/ATS webhook URL, or a Resend account with a verified sending domain and the recruiting inbox
+- Get Started delivery: a CRM webhook URL (`INQUIRY_WEBHOOK_URL`), or Resend plus a mortgage inbox (falls back to the Contact inboxes)
+- ARIVE borrower application URL (the Get Started confirmation shows the application button only once it is set)
 - Contact delivery: a CRM webhook URL, or Resend plus the general (and optional mortgage) inbox; optionally Turnstile keys
 - Business hours, and whether the office address may be published
 - Phone, email, recruiting email, office address (if publishing one)

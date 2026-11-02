@@ -42,9 +42,12 @@
 - [ ] Non-QM page (`src/content/non-qm.ts`): confirm Bank Statement, DSCR, and 1099 programs are currently available through a wholesale partner before launch, or remove the card. Review the QM/ability-to-repay explanation, the comparison table, and the FAQ answers. The page states no thresholds (scores, ratios, months of statements, down payment, reserves) or rates.
 - [ ] Resources page: review the calculator disclaimer and assumptions, and confirm that a blank, user-entered rate is acceptable (no default rate is shown). Review the mortgage-basics and FAQ answers (credit inquiries, discount points, rate locks, escrow, TRID timing).
 - [ ] About page (`src/content/about.ts`): confirm the "veteran-owned and operated" statement and the values copy. Before publishing any team profile, confirm the name, title, portrait license, and individual NMLS ID (verify in NMLS Consumer Access), then set `approved: true` in `src/content/team.ts`.
+- [ ] Get Started (`src/content/get-started.ts`, `src/components/get-started/inquiry-wizard.tsx`): review the consent wording, the "What to expect" note, and the confirmation text.
 - [ ] Before listing anything under "Other Residential Options", verify current availability with a wholesale lending partner (`verifiedPrograms` array)
 
 ## Safeguards
+
+- Get Started inquiries go only to `/api/inquiry` as `mortgage_inquiry` / `borrower_lead` records. The form is labeled a preliminary inquiry, not a loan application, and asks for no SSN, date of birth, account numbers, tax returns, paystubs, license or credit report; free text that looks like an SSN or account/card number is rejected. Only Florida properties are accepted, and other states get a notice that Green Valor serves Florida only (no out-of-state offer). Consent wording states it does not lock a rate or guarantee approval, and that lending partners make all credit decisions. The ARIVE button renders only for an https URL, and the site loads no analytics. Applicant data is never written to logs, the console or browser storage (test-enforced).
 
 - Contact inquiries go only to `/api/contact`, classified `mortgage_inquiry` (borrower) or `general_inquiry`; career inquiries are refused there and routed to `/careers`. No contact detail renders unless configured, and the address also needs explicit approval (test-enforced).
 

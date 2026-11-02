@@ -615,6 +615,78 @@ for (const viewport of viewports) {
     await contactContext.close();
   }
 
+  // Get Started: wizard steps, Back keeps entries, Florida-only, numbers, no sensitive fields.
+  // (No submission here; tests/e2e/inquiry-submit.mjs covers delivery against a mock CRM.)
+  {
+    const v = viewport.name;
+    const gsContext = await browser.newContext({ viewport, reducedMotion: "reduce" });
+    const page = await gsContext.newPage();
+    page.on("pageerror", (e) => errors.push(e.message));
+    page.on("console", (m) => m.type() === "error" && errors.push(m.text()));
+    await page.goto(BASE + "/get-started", { waitUntil: "networkidle" });
+    const count = () => page.getByTestId("step-count").textContent();
+    const nextBtn = () => page.getByRole("button", { name: /^Next/ }).click();
+    let posted = 0;
+    page.on("request", (r) => r.url().includes("/api/inquiry") && posted++);
+
+    await nextBtn();
+    if ((await count()) !== "Step 1 of 4") fail(`${v}: get-started advanced without a goal`);
+    await page.locator("label", { hasText: "Finance an Investment Property" }).click();
+    await nextBtn();
+    if ((await count()) !== "Step 2 of 4") fail(`${v}: goal step did not advance`);
+    if ((await page.locator("#gs-propertyState").inputValue()) !== "FL")
+      fail(`${v}: Florida not preselected`);
+    await page.locator("#gs-propertyState").selectOption("CA");
+    if (!(await page.getByTestId("florida-only").isVisible())) fail(`${v}: Florida-only notice missing`);
+    await page.locator("#gs-location").fill("Orlando");
+    await page.locator("#gs-propertyType").selectOption("multi-unit");
+    await page.locator("#gs-occupancy").selectOption("investment");
+    await nextBtn();
+    if ((await count()) !== "Step 2 of 4") fail(`${v}: advanced with an out-of-state property`);
+    await page.locator("#gs-propertyState").selectOption("FL");
+    await page.locator("#gs-estimatedValue").fill("12x");
+    await nextBtn();
+    if ((await count()) !== "Step 2 of 4") fail(`${v}: advanced with an invalid amount`);
+    await page.locator("#gs-estimatedValue").fill("610000");
+    await page.locator("#gs-location").focus();
+    if ((await page.locator("#gs-estimatedValue").inputValue()) !== "610,000")
+      fail(`${v}: amount not formatted`);
+    await axe(page, `${v} /get-started (step 2)`);
+    await nextBtn();
+    if ((await count()) !== "Step 3 of 4") fail(`${v}: property step did not advance`);
+    await page.locator("#gs-timeline").selectOption("3-6-months");
+    await page.locator("#gs-notes").fill("Two rentals already.");
+    await nextBtn();
+    if ((await count()) !== "Step 4 of 4") fail(`${v}: financing step did not advance`);
+    const kb = await page.evaluate(() => [
+      document.querySelector("#gs-email")?.type,
+      document.querySelector("#gs-email")?.inputMode,
+      document.querySelector("#gs-phone")?.type,
+    ]);
+    if (kb.join() !== "email,email,tel") fail(`${v}: get-started keyboards ${kb}`);
+    await page.getByRole("button", { name: "Submit Inquiry" }).click();
+    if ((await count()) !== "Step 4 of 4") fail(`${v}: blank contact step left step 4`);
+    await axe(page, `${v} /get-started (step 4 errors)`);
+    for (let i = 0; i < 3; i++) await page.getByRole("button", { name: "Back" }).click();
+    if ((await count()) !== "Step 1 of 4") fail(`${v}: Back did not reach step 1`);
+    if (!(await page.locator("#gs-goal-investment").isChecked())) fail(`${v}: goal lost after Back`);
+    await nextBtn();
+    if ((await page.locator("#gs-location").inputValue()) !== "Orlando")
+      fail(`${v}: location lost after Back`);
+    await nextBtn();
+    if ((await page.locator("#gs-notes").inputValue()) !== "Two rentals already.")
+      fail(`${v}: notes lost after Back`);
+    const names = await page
+      .locator("form input, form select, form textarea")
+      .evaluateAll((els) => els.map((e) => e.getAttribute("name") ?? ""));
+    if (names.some((n) => /ssn|social|birth|dob|account|routing|tax|paystub|license|credit/i.test(n)))
+      fail(`${v}: sensitive field on get-started: ${names}`);
+    if (posted) fail(`${v}: incomplete inquiry was sent`);
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+    if (overflow > 0) fail(`${v}: get-started overflow ${overflow}px`);
+    await gsContext.close();
+  }
+
   if (errors.length) fail(`${viewport.name}: console errors: ${[...new Set(errors)].join(" | ")}`);
   await context.close();
 }
@@ -664,5 +736,5 @@ if (failures.length) {
 }
 console.log(
   `PASS: ${routes.length} routes x ${viewports.length} viewports (${viewports.map((v) => v.width).join("/")}), ` +
-    "header/drawer keyboard + scroll lock, footer links, logo scaling, careers CTAs/preselection/validation, contact info/validation/career routing, axe (WCAG 2.1 AA + best practice), motion, robots/sitemap",
+    "header/drawer keyboard + scroll lock, footer links, logo scaling, careers CTAs/preselection/validation, contact info/validation/career routing, get-started wizard, axe (WCAG 2.1 AA + best practice), motion, robots/sitemap",
 );

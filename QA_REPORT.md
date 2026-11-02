@@ -1,5 +1,15 @@
 # QA Report
 
+## Phase 10: Get Started page (2026-11-02)
+
+These were actually run on a production build:
+
+- `npm run lint`, `tsc --noEmit` and `npm run build` are clean. `npm test` passes (304 tests). New: `inquiry-schema`, `inquiry-api`, `inquiry-wizard` and `get-started-content` tests (scenario list in `docs/visual-review/GET_STARTED_REVIEW.md`).
+- `tests/e2e/smoke.mjs` passes on 13 routes × 5 viewports, including new Get Started checks in a fresh browser context: goal required, Florida preselected and the Florida-only notice, invalid amount blocked, amount formatting, blank contact step blocked, Back keeps entries, no sensitive fields, keyboards, no request sent, axe on steps 2 and 4, no overflow.
+- `tests/e2e/inquiry-submit.mjs` passes against `next start` with a mock CRM webhook, on a mobile viewport: valid Non-QM inquiry classified and delivered once on a double click, approved confirmation, backend error and a hung request (timeout) never show success, no applicant data in the console or storage. Run twice: with `NEXT_PUBLIC_BORROWER_APPLICATION_URL` set (ARIVE button shown) and unset (hidden).
+- `contact-submit.mjs` and `careers-submit.mjs` still pass after moving spam helpers to `src/lib/forms/spam.ts`.
+- Lighthouse on /get-started: mobile 96/100/100/69, desktop 100/100/100/69.
+
 ## Phase 9: Contact page (2026-11-02)
 
 These were actually run on a production build:
