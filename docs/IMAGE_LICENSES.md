@@ -27,9 +27,9 @@ Avoid images showing identifiable people with captions or context implying they 
 
 ## License log
 
-| File         | Slot | Source | License | Attribution required | Acquired | Record |
-| ------------ | ---- | ------ | ------- | -------------------- | -------- | ------ |
-| _(none yet)_ |      |        |         |                      |          |        |
+| File                                                                 | Slot            | Source                                       | License                        | Attribution required | Acquired   | Record                                                                              |
+| -------------------------------------------------------------------- | --------------- | -------------------------------------------- | ------------------------------ | -------------------- | ---------- | ----------------------------------------------------------------------------------- |
+| `public/videos/home-hero.mp4`, `public/videos/home-hero-poster.webp` | Home hero video | Supplied by Green Valor Lending (2026-11-02) | To be confirmed by Green Valor | To be confirmed      | 2026-11-02 | Confirm the commercial license and model releases for the identifiable people shown |
 
 ## Adding a photo
 
