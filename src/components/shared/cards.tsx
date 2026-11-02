@@ -19,7 +19,7 @@ function IconBadge({ icon: Icon, tone = "light" }: { icon: LucideIcon; tone?: "l
 
 type ServiceCardProps = {
   icon?: LucideIcon;
-  title: string;
+  title: React.ReactNode;
   description: string;
   href: string;
   linkLabel?: string;

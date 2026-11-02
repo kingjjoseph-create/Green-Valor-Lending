@@ -1,5 +1,23 @@
 # QA Report
 
+## Phase 6: Borrower Resources page (2026-11-02)
+
+These were actually run on a production build:
+
+- `npm run lint`, `tsc --noEmit` and `npm run build` are clean.
+- `npm test`: 127/127 pass. New files:
+  - `mortgage.test.ts`: amortization checked against independently computed values, plus edge cases, validation, rounding and formatting.
+  - `mortgage-calculator.test.tsx`: live updates, mode switching, accessible errors, mobile inputs, clearing the form, the disclaimer, and FAQ filtering.
+  - `resources-content.test.ts`
+- `tests/e2e/smoke.mjs` passes on 13 routes × 5 viewports. It adds browser checks:
+  - the calculator total in a real browser, and that the page doesn't reload
+  - mobile input size, font and keyboard type
+  - error state and axe
+  - FAQ search, empty state and topic filter
+  - overflow after interaction, and links
+- Lighthouse on /resources: mobile 95/100/100/69, desktop 100/100/100/69.
+- Details: `docs/visual-review/RESOURCES_REVIEW.md`.
+
 ## Phase 5: Non-QM page (2026-11-02)
 
 These were actually run on a production build:
