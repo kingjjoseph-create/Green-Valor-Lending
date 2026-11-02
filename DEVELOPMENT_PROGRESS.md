@@ -18,7 +18,7 @@
 
 - Added the official logos supplied by Green Valor: horizontal (header, footer), stacked (social share image), GV mark (mobile menu, Apple touch icon), and the 64px favicon.
 - Prepared files by trimming surrounding white space and making the white background transparent. Artwork and colors are unchanged; aspect ratios are enforced by a unit test.
-- No reversed (light-on-dark) logo exists yet, so the footer shows the logo on a white plate.
+- Reversed GV mark (white/gold on green tile) used in the footer and for the Apple touch icon.
 - Default Open Graph image (`public/images/og-default.png`) applied to every page.
 
 **Placeholders to remove before launch** (search `data-placeholder`)
@@ -27,7 +27,7 @@
 
 ## Needed from Green Valor
 
-- Optional: a reversed (white/gold) logo for dark backgrounds, and SVG versions of the logos for the sharpest rendering
+- Optional: SVG versions of the logos for the sharpest rendering
 - Phone, email, recruiting email, office address (if publishing one)
 - Company NMLS ID and Florida license number once issued
 - Borrower application URL, scheduling URL, CRM choice

@@ -60,7 +60,7 @@ Typography: **Cormorant Garamond** (display serif, h1 to h3) + **Inter** (body/U
 
 ## Logos
 
-`<Logo variant="horizontal" | "stacked" | "mark" />` reads `src/config/brand-assets.ts` and renders through `next/image` at a fixed height with `width: auto`, so the aspect ratio is preserved. Files live in `public/logos/` (transparent PNGs prepared from the official files; artwork unchanged). Favicon `src/app/icon.png` and `src/app/apple-icon.png` come from the official files too. No reversed logo exists yet, so on Primary Green the logo sits on a white plate. A unit test checks each registered size matches the file.
+`<Logo variant="horizontal" | "stacked" | "mark" | "mark-reversed" />` reads `src/config/brand-assets.ts` and renders through `next/image` at a fixed height with `width: auto`, so the aspect ratio is preserved. Files live in `public/logos/` (transparent PNGs prepared from the official files; artwork unchanged). Favicon `src/app/icon.png` is the official 64px file; `src/app/apple-icon.png` is the reversed mark on Primary Green. On Primary Green (footer) the reversed GV mark is used. A unit test checks each registered size matches the file.
 
 ## Metadata
 

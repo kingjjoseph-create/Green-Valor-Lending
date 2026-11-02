@@ -30,8 +30,7 @@ export function SiteFooter() {
       <Container className="py-16 lg:py-20">
         <div className="grid gap-12 lg:grid-cols-12">
           <div className="space-y-5 lg:col-span-5">
-            {/* No reversed logo supplied yet: show the official logo on a light plate. */}
-            <Logo height={56} className="rounded-md bg-white px-5 py-4 shadow-sm ring-1 ring-black/5" />
+            <Logo variant="mark-reversed" height={88} />
             <p className="max-w-sm font-serif text-2xl leading-snug text-white">{company.brand.tagline}</p>
             <p className="text-xs font-semibold tracking-[0.25em] text-gv-gold-bright uppercase">
               {company.brand.positioning}

@@ -16,12 +16,12 @@
 
 Run on Node 22.23, Next 16.4.3, in a Linux container. Results below are from commands actually executed.
 
-| Check                | Command                                 | Result                                        |
-| -------------------- | --------------------------------------- | --------------------------------------------- |
-| Lint                 | `npm run lint`                          | Pass, 0 problems                              |
-| Types                | `npm run typecheck`                     | Pass, 0 errors                                |
-| Unit tests           | `npm test`                              | Pass, 15/15 tests in 4 files                  |
-| Production build     | `npm run build`                         | Pass. 16 routes, all prerendered static       |
+| Check                | Command                                 | Result                                                |
+| -------------------- | --------------------------------------- | ----------------------------------------------------- |
+| Lint                 | `npm run lint`                          | Pass, 0 problems                                      |
+| Types                | `npm run typecheck`                     | Pass, 0 errors                                        |
+| Unit tests           | `npm test`                              | Pass, 15/15 tests in 4 files                          |
+| Production build     | `npm run build`                         | Pass. 16 routes, all prerendered static               |
 | Browser smoke + a11y | `npm run test:e2e` against `next start` | Pass: 12 routes x 3 viewports (1440px, 1024px, 390px) |
 
 **The smoke test checks:** HTTP 200, exactly one `<h1>`, no `undefined`/`null`/`NaN` in page text, no horizontal overflow, axe-core WCAG 2.0/2.1 A+AA, no console errors, skip link is the first tab stop, desktop active-nav state, mobile menu opens, navigates and closes, robots.txt blocks crawlers pre-launch.

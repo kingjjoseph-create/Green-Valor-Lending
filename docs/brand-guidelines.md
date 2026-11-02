@@ -8,7 +8,7 @@
 - Recruitment: "Discipline. Ambition. Opportunity."
 - Positioning: "Veteran-Owned. Service-Driven. Growth-Focused."
 
-**Logos:** horizontal logo in header and footer; stacked logo for the social share image; GV mark in the mobile menu and touch icon; official 64px favicon. On dark green, use the logo on a white plate until a reversed version exists. Never stretch, recolor, or distort. See `src/config/brand-assets.ts`.
+**Logos:** horizontal logo in header and footer; stacked logo for the social share image; GV mark in the mobile menu and touch icon; official 64px favicon. On dark green, use the reversed GV mark. Never stretch, recolor, or distort. See `src/config/brand-assets.ts`.
 
 **Color and type:** see ARCHITECTURE.md, Design system.
 
