@@ -247,6 +247,53 @@ for (const viewport of viewports) {
     await page.waitForURL("**/residential-loans").catch(() => fail("residential card CTA did not navigate"));
   }
 
+  // Residential Loans: CTA targets, program cards, FAQ accordions open/close by mouse and keyboard.
+  {
+    await page.goto(BASE + "/residential-loans");
+    const main = page.locator("main");
+    const resLinks = {
+      "Discuss Your Home Loan Options": "/contact",
+      "Ask about your situation": "/contact",
+      "Get Started": "/get-started",
+    };
+    for (const [name, href] of Object.entries(resLinks)) {
+      const link = main.getByRole("link", { name: new RegExp(`^${name}`) });
+      if ((await link.count()) !== 1)
+        fail(`${viewport.name}: residential "${name}" found ${await link.count()} times`);
+      else if ((await link.getAttribute("href")) !== href)
+        fail(`${viewport.name}: residential "${name}" -> ${await link.getAttribute("href")}`);
+    }
+    for (const t of [
+      "Conventional Loans",
+      "FHA Loans",
+      "VA Loans",
+      "Other Residential Options",
+      "Purchase",
+      "Refinance",
+    ]) {
+      if ((await main.getByRole("heading", { name: t, exact: true }).count()) !== 1)
+        fail(`${viewport.name}: residential heading "${t}" missing`);
+    }
+    const details = main.locator("details");
+    if ((await details.count()) !== 6)
+      fail(`${viewport.name}: expected 6 residential FAQs, got ${await details.count()}`);
+    const first = details.first();
+    await first.locator("summary").click();
+    if (!(await first.evaluate((d) => d.open))) fail(`${viewport.name}: FAQ did not open on click`);
+    await first.locator("summary").click();
+    if (await first.evaluate((d) => d.open)) fail(`${viewport.name}: FAQ did not close on click`);
+    const last = details.last();
+    await last.locator("summary").focus();
+    await page.keyboard.press("Enter");
+    if (!(await last.evaluate((d) => d.open))) fail(`${viewport.name}: FAQ did not open with Enter`);
+    const faqLink = last.getByRole("link", { name: /^Get started/ });
+    if ((await faqLink.getAttribute("href")) !== "/get-started")
+      fail(`${viewport.name}: FAQ get-started link wrong`);
+    const overflowOpen = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+    if (overflowOpen > 0) fail(`${viewport.name}: residential overflow ${overflowOpen}px with FAQ open`);
+    await axe(page, `${viewport.name} /residential-loans (FAQ open)`);
+  }
+
   if (errors.length) fail(`${viewport.name}: console errors: ${[...new Set(errors)].join(" | ")}`);
   await context.close();
 }

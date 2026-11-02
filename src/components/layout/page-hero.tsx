@@ -53,7 +53,8 @@ export function PageHero({
             aspect="4/3"
             priority
             sizes="(min-width: 1024px) 50vw, 100vw"
-            className="gv-fade-in-delay"
+            // Until a licensed photo exists, the empty frame is shown on large screens only.
+            className={cn("gv-fade-in-delay", !image && "max-lg:hidden")}
           />
         )}
       </Container>

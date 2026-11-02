@@ -35,6 +35,8 @@
 - [ ] Recruiting copy reviewed (no income claims)
 - [ ] Homepage (`src/content/home.ts`): confirm the example programs (Conventional, FHA, VA, Bank Statement, DSCR, 1099, Alternative Documentation) are available through current wholesale partners. They are presented as "may include" with an availability disclaimer.
 - [ ] Homepage government non-affiliation statement (VA / FHA) wording
+- [ ] Residential page (`src/content/residential.ts`): review program descriptions (Conventional, FHA, VA), the FAQ answers (preapproval, mortgage insurance, closing costs including Florida documentary stamp and intangible taxes, TRID timing), and the VA/FHA/HUD non-affiliation statements. Down-payment amounts and percentages are deliberately left out (Reg Z 1026.24(d) trigger terms).
+- [ ] Before listing anything under "Other Residential Options", verify current availability with a wholesale lending partner (`verifiedPrograms` array)
 
 ## Safeguards
 
