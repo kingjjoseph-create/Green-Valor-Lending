@@ -715,6 +715,22 @@ for (const viewport of viewports) {
     () => getComputedStyle(document.querySelector(".gv-fade-in")).animationName,
   );
   if (animated !== "gv-fade-up") fail(`motion: hero fade-in not applied (got ${animated})`);
+  // Hero video: muted, looping, playing, hidden from assistive tech; the pause button works.
+  const video = page.getByTestId("home-hero-video");
+  await page.waitForFunction(() => !document.querySelector("[data-testid=home-hero-video]").paused, null, {
+    timeout: 10_000,
+  });
+  const v = await video.evaluate((el) => ({
+    muted: el.muted,
+    loop: el.loop,
+    hidden: el.getAttribute("aria-hidden"),
+  }));
+  if (!v.muted || !v.loop || v.hidden !== "true") fail(`hero video attributes wrong: ${JSON.stringify(v)}`);
+  const toggle = page.getByRole("button", { name: "Pause background video" });
+  await toggle.click();
+  if (!(await video.evaluate((el) => el.paused))) fail("hero video did not pause");
+  await page.getByRole("button", { name: "Play background video" }).click();
+  if (await video.evaluate((el) => el.paused)) fail("hero video did not resume");
   await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
   await page.waitForTimeout(300);
   await axe(page, "motion / scrolled to bottom");
@@ -729,6 +745,11 @@ for (const viewport of viewports) {
     () => getComputedStyle(document.querySelector(".gv-fade-in")).animationName,
   );
   if (name !== "none") fail(`reduced motion: animations still applied (${name})`);
+  await page.waitForTimeout(1000);
+  if (!(await page.getByTestId("home-hero-video").evaluate((el) => el.paused)))
+    fail("reduced motion: hero video should not play");
+  if (!(await page.getByRole("button", { name: "Play background video" }).isVisible()))
+    fail("reduced motion: play button missing");
   await context.close();
 }
 
@@ -758,5 +779,5 @@ if (failures.length) {
 }
 console.log(
   `PASS: ${routes.length} routes x ${viewports.length} viewports (${viewports.map((v) => v.width).join("/")}), ` +
-    "header/drawer keyboard + scroll lock, footer links, logo scaling, careers CTAs/preselection/validation, contact info/validation/career routing, get-started wizard, axe (WCAG 2.1 AA + best practice), licensing notice + legal draft banners, legacy legal redirects, motion, robots/sitemap",
+    "header/drawer keyboard + scroll lock, footer links, logo scaling, careers CTAs/preselection/validation, contact info/validation/career routing, get-started wizard, axe (WCAG 2.1 AA + best practice), licensing notice + legal draft banners, legacy legal redirects, hero video (loop/pause/reduced motion), motion, robots/sitemap",
 );
