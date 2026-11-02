@@ -1,5 +1,15 @@
 # QA Report
 
+## Phase 9: Contact page (2026-11-02)
+
+These were actually run on a production build:
+
+- `npm run lint`, `tsc --noEmit` and `npm run build` are clean. `npm test` passes (238 tests). New: `contact-schema`, `contact-api`, `contact-form`, `contact-content` and `contact-page` tests (see `docs/visual-review/CONTACT_REVIEW.md` for the scenario list).
+- `tests/e2e/smoke.mjs` passes on 13 routes × 5 viewports, including new Contact checks: only verified rows, callout links, keyboards, 16px inputs, blank/invalid submissions blocked with no request, 2,000-character cap, career routing, axe, no overflow.
+- `tests/e2e/contact-submit.mjs` passes against `next start` with a mock CRM webhook: success and classification, duplicate delivered once, spam check failure, network failure, delivery failure (never false success), career routing. `tests/e2e/careers-submit.mjs` still passes after the shared-helper refactor.
+- Lighthouse on /contact: mobile 98/100/100/69, desktop 100/100/100/69.
+- Known test-harness note: after many page loads in one browser context, local `next start` (HTTP/1.1) leaves link-prefetch responses open, so Playwright's `networkidle` never settles. This reproduces on `main` too; page loads themselves finish in about 100 ms. The smoke test runs the Contact checks in a fresh browser context.
+
 ## Phase 8: Careers & Recruitment page (2026-11-02)
 
 These were actually run on a production build:

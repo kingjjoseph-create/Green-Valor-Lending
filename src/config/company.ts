@@ -28,6 +28,22 @@ export type PostalAddress = {
   postalCode: string;
 };
 
+/**
+ * The office address renders only when the business has approved publishing
+ * it (NEXT_PUBLIC_PUBLISH_OFFICE_ADDRESS=true) and street, city, state and ZIP
+ * are all supplied. Never fill these with a made-up or virtual address.
+ */
+function officeAddress(): PostalAddress | null {
+  if (process.env.NEXT_PUBLIC_PUBLISH_OFFICE_ADDRESS?.trim().toLowerCase() !== "true") return null;
+  const street = env(process.env.NEXT_PUBLIC_OFFICE_STREET);
+  const city = env(process.env.NEXT_PUBLIC_OFFICE_CITY);
+  const state = env(process.env.NEXT_PUBLIC_OFFICE_STATE);
+  const postalCode = env(process.env.NEXT_PUBLIC_OFFICE_POSTAL_CODE);
+  if (!street || !city || !state || !postalCode) return null;
+  const suite = env(process.env.NEXT_PUBLIC_OFFICE_SUITE);
+  return { street, ...(suite ? { suite } : {}), city, state, postalCode };
+}
+
 export type SocialLinks = {
   facebook: string | null;
   instagram: string | null;
@@ -68,7 +84,10 @@ export const company = {
   phone: env(process.env.NEXT_PUBLIC_COMPANY_PHONE),
   email: env(process.env.NEXT_PUBLIC_COMPANY_EMAIL),
   recruitingEmail: env(process.env.NEXT_PUBLIC_RECRUITING_EMAIL),
-  address: null as PostalAddress | null,
+  /** Office address: published only when every part is set AND publication is approved. */
+  address: officeAddress(),
+  /** Business hours as supplied by the business, e.g. "Monday to Friday, 9:00 a.m. to 5:00 p.m. ET". */
+  businessHours: env(process.env.NEXT_PUBLIC_BUSINESS_HOURS),
 
   licensing: {
     /** Company NMLS ID. Status is "Pending" per the business; do not publish until issued. */

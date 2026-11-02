@@ -12,7 +12,14 @@
  * Applicant data is never logged. Recruitment inquiries are labeled
  * "recruitment_inquiry" and are never sent to borrower-lead destinations.
  */
-import { createHmac } from "node:crypto";
+import {
+  envValue as val,
+  postWebhook,
+  renderRows,
+  runChannels,
+  sendResendEmail,
+  type Fetch,
+} from "@/lib/forms/delivery";
 
 import {
   CONTACT_METHODS,
@@ -30,8 +37,6 @@ export type DeliveryConfig = {
   emailFrom: string | null;
   emailTo: string | null;
 };
-
-const val = (v: string | undefined) => (v && v.trim() !== "" ? v.trim() : null);
 
 export function readDeliveryConfig(env: NodeJS.ProcessEnv = process.env): DeliveryConfig {
   return {
@@ -77,9 +82,6 @@ export function buildRecruitmentRecord(inquiry: RecruitmentInquiry, submittedAt 
 
 export type RecruitmentRecord = ReturnType<typeof buildRecruitmentRecord>;
 
-const escapeHtml = (s: string) =>
-  s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
-
 export function renderEmail(record: RecruitmentRecord) {
   const a = record.applicant;
   const rows: [string, string][] = [
@@ -95,59 +97,33 @@ export function renderEmail(record: RecruitmentRecord) {
     ["Preferred contact", a.preferredContactMethod],
     ["Why Green Valor Lending?", a.whyGreenValor],
   ];
-  const text = [
-    "New recruitment inquiry (careers, not a borrower lead)",
-    `Submitted: ${record.submittedAt}`,
-    "",
-    ...rows.map(([k, v]) => `${k}: ${v}`),
-  ].join("\n");
-  const html = `<h2>New recruitment inquiry</h2><p>Careers inquiry from the website. Not a borrower lead.</p><table cellpadding="6">${rows
-    .map(
-      ([k, v]) =>
-        `<tr><th align="left" valign="top">${escapeHtml(k)}</th><td>${escapeHtml(v).replace(/\n/g, "<br>")}</td></tr>`,
-    )
-    .join("")}</table><p>Submitted ${escapeHtml(record.submittedAt)}</p>`;
+  const { text, html } = renderRows(
+    "New recruitment inquiry",
+    "Careers inquiry from the website. Not a borrower lead.",
+    rows,
+    record.submittedAt,
+  );
   return { subject: `Recruitment inquiry: ${a.fullName} (${a.careerPathway})`, text, html };
 }
 
-type Fetch = typeof fetch;
-const TIMEOUT_MS = 10_000;
-
 async function sendWebhook(record: RecruitmentRecord, c: DeliveryConfig, f: Fetch) {
-  const body = JSON.stringify(record);
-  const headers: Record<string, string> = {
-    "Content-Type": "application/json",
-    "User-Agent": "GreenValorWebsite/1.0",
-  };
-  if (c.webhookSecret) {
-    headers["X-Green-Valor-Signature"] =
-      `sha256=${createHmac("sha256", c.webhookSecret).update(body).digest("hex")}`;
-  }
-  const res = await f(c.webhookUrl!, {
-    method: "POST",
-    headers,
-    body,
-    signal: AbortSignal.timeout(TIMEOUT_MS),
-  });
-  if (!res.ok) throw new Error(`webhook responded ${res.status}`);
+  await postWebhook(c.webhookUrl!, record, c.webhookSecret, f);
 }
 
 async function sendEmail(record: RecruitmentRecord, c: DeliveryConfig, f: Fetch) {
   const { subject, text, html } = renderEmail(record);
-  const res = await f("https://api.resend.com/emails", {
-    method: "POST",
-    headers: { Authorization: `Bearer ${c.resendApiKey}`, "Content-Type": "application/json" },
-    body: JSON.stringify({
-      from: c.emailFrom,
-      to: [c.emailTo],
-      reply_to: record.applicant.email,
+  await sendResendEmail(
+    {
+      apiKey: c.resendApiKey!,
+      from: c.emailFrom!,
+      to: c.emailTo!,
+      replyTo: record.applicant.email,
       subject,
       text,
       html,
-    }),
-    signal: AbortSignal.timeout(TIMEOUT_MS),
-  });
-  if (!res.ok) throw new Error(`email provider responded ${res.status}`);
+    },
+    f,
+  );
 }
 
 export type DeliveryResult = { delivered: boolean; channels: { name: string; ok: boolean }[] };
@@ -162,14 +138,5 @@ export async function deliverRecruitment(
   if (config.webhookUrl) jobs.push({ name: "webhook", run: () => sendWebhook(record, config, f) });
   if (emailConfigured(config)) jobs.push({ name: "email", run: () => sendEmail(record, config, f) });
 
-  const results = await Promise.allSettled(jobs.map((j) => j.run()));
-  const channels = jobs.map((j, i) => ({ name: j.name, ok: results[i]!.status === "fulfilled" }));
-  for (const [i, r] of results.entries()) {
-    // Log the channel and reason only. Never log applicant data.
-    if (r.status === "rejected")
-      console.error(
-        `[recruitment] ${jobs[i]!.name} delivery failed: ${String((r.reason as Error)?.message ?? r.reason)}`,
-      );
-  }
-  return { delivered: channels.some((c) => c.ok), channels };
+  return runChannels("recruitment", jobs);
 }

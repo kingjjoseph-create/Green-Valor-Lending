@@ -544,6 +544,77 @@ for (const viewport of viewports) {
     await axe(page, `${v} /careers (errors shown)`);
   }
 
+  // Contact: verified info only, callouts, career routing, client validation, mobile keyboards.
+  // (No submission here; tests/e2e/contact-submit.mjs covers delivery against a mock receiver.)
+  {
+    const v = viewport.name;
+    // Fresh context: after many loads, local `next start` (HTTP/1.1) leaves link-prefetch
+    // responses open, which stalls "networkidle". This also happens on main; real page
+    // loads are unaffected (load fires in ~100 ms).
+    const contactContext = await browser.newContext({ viewport, reducedMotion: "reduce" });
+    const page = await contactContext.newPage();
+    page.on("pageerror", (e) => errors.push(e.message));
+    page.on("console", (m) => m.type() === "error" && errors.push(m.text()));
+    await page.goto(BASE + "/contact", { waitUntil: "networkidle" });
+    const main = page.locator("main");
+    const rows = await main
+      .locator("[data-testid=contact-info] [data-row]")
+      .evaluateAll((els) => els.map((e) => e.getAttribute("data-row")));
+    if (rows.join() !== "company,service")
+      fail(`${v}: contact rows ${rows.join()} (expected only company,service)`);
+    if (await main.locator("[data-testid=contact-info] [data-row] > div > div:empty").count())
+      fail(`${v}: blank contact row`);
+    for (const [name, href] of [
+      ["Get Started", "/get-started"],
+      ["Explore Careers", "/careers"],
+    ]) {
+      const link = main.getByRole("link", { name: new RegExp(`^${name}`) });
+      if ((await link.count()) !== 1) fail(`${v}: contact "${name}" found ${await link.count()} times`);
+      else if ((await link.getAttribute("href")) !== href)
+        fail(`${v}: contact "${name}" -> ${await link.getAttribute("href")}`);
+    }
+    const kb = await page.evaluate(() => ({
+      email: [document.querySelector("#cf-email")?.type, document.querySelector("#cf-email")?.inputMode],
+      phone: [document.querySelector("#cf-phone")?.type, document.querySelector("#cf-phone")?.inputMode],
+    }));
+    if (kb.email.join() !== "email,email" || kb.phone.join() !== "tel,tel")
+      fail(`${v}: contact keyboards ${JSON.stringify(kb)}`);
+    const small = await main
+      .locator("form input:not([type=checkbox]):not([name=website]), form select, form textarea")
+      .evaluateAll(
+        (els) => els.filter((e) => e.offsetParent && parseFloat(getComputedStyle(e).fontSize) < 16).length,
+      );
+    if (small) fail(`${v}: ${small} contact inputs below 16px`);
+
+    let posted = 0;
+    const onReq = (r) => r.url().includes("/api/contact") && posted++;
+    page.on("request", onReq);
+    await page.getByRole("button", { name: "Send Message" }).click();
+    const summary = page.getByTestId("contact-error-summary");
+    if (!(await summary.isVisible())) fail(`${v}: blank contact form not rejected`);
+    await page.locator("#cf-email").fill("pat@example");
+    await page.locator("#cf-phone").fill("555-0100");
+    await page.locator("#cf-message").fill("x".repeat(2500));
+    if ((await page.locator("#cf-message").inputValue()).length !== 2000)
+      fail(`${v}: message not capped at 2000`);
+    await page.getByRole("button", { name: "Send Message" }).click();
+    const t = await summary.innerText();
+    if (!/valid email/i.test(t) || !/valid phone/i.test(t)) fail(`${v}: invalid email/phone not rejected`);
+    if (posted) fail(`${v}: invalid contact form was sent to the server`);
+    page.off("request", onReq);
+    await axe(page, `${v} /contact (errors shown)`);
+
+    await page.locator("#cf-reason").selectOption("career");
+    const go = page.getByRole("link", { name: /Go to the Careers Form/ });
+    if ((await go.getAttribute("href")) !== "/careers#apply") fail(`${v}: career routing link wrong`);
+    if (await page.getByRole("button", { name: "Send Message" }).count())
+      fail(`${v}: career reason still submittable`);
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+    if (overflow > 0) fail(`${v}: contact overflow ${overflow}px`);
+    await axe(page, `${v} /contact (career notice)`);
+    await contactContext.close();
+  }
+
   if (errors.length) fail(`${viewport.name}: console errors: ${[...new Set(errors)].join(" | ")}`);
   await context.close();
 }
@@ -593,5 +664,5 @@ if (failures.length) {
 }
 console.log(
   `PASS: ${routes.length} routes x ${viewports.length} viewports (${viewports.map((v) => v.width).join("/")}), ` +
-    "header/drawer keyboard + scroll lock, footer links, logo scaling, careers CTAs/preselection/validation, axe (WCAG 2.1 AA + best practice), motion, robots/sitemap",
+    "header/drawer keyboard + scroll lock, footer links, logo scaling, careers CTAs/preselection/validation, contact info/validation/career routing, axe (WCAG 2.1 AA + best practice), motion, robots/sitemap",
 );

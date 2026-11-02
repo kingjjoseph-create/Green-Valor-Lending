@@ -61,6 +61,12 @@
 
 The form (`components/careers/recruitment-form.tsx`) posts to a dedicated endpoint, `POST /api/recruitment`, that is separate from any borrower flow. Validation is shared between client and server (`src/lib/recruitment/schema.ts`). Delivery (`src/lib/recruitment/deliver.ts`) goes to a signed webhook and/or email through Resend, configured with server-only variables (see DEPLOYMENT.md). With nothing configured the form says online inquiries are unavailable; it never shows a false success. There is no resume upload. The pathway CTAs link to `/careers?pathway=licensed#apply` and `?pathway=aspiring#apply`, which preselect the form. `NEXT_PUBLIC_FEATURE_CAREERS_APPLICATION` now defaults to on. Review is in `docs/visual-review/CAREERS_REVIEW.md`.
 
+## Phase 9: Contact page (2026-11-02)
+
+**Done:** `/contact` with the hero, verified contact information from company config (blank rows never render; the office address needs explicit approval), the general contact form, and the borrower and careers callouts. Copy is in `src/content/contact.ts`.
+
+The form (`components/contact/contact-form.tsx`) posts to `POST /api/contact`. Validation is shared (`src/lib/contact/schema.ts`). Spam protection (`src/lib/contact/spam.ts`) uses a honeypot, a minimum fill time, optional Cloudflare Turnstile and duplicate suppression, with a per-IP rate limit. Delivery (`src/lib/contact/deliver.ts`) goes to a signed CRM webhook and/or Resend email, classified as `mortgage_inquiry` or `general_inquiry`, with optional separate mortgage inbox. "Career Opportunity" sends visitors to the Careers recruitment form. Shared request guards and delivery helpers now live in `src/lib/forms/`, and the recruitment endpoint uses them too. Review is in `docs/visual-review/CONTACT_REVIEW.md`.
+
 **Placeholders to remove before launch** (search `data-placeholder`)
 
 - `PhasePlaceholder` blocks on interior pages
@@ -70,6 +76,8 @@ The form (`components/careers/recruitment-form.tsx`) posts to a dedicated endpoi
 
 - Optional: SVG versions of the logos for the sharpest rendering
 - Recruitment delivery: a recruiting CRM/ATS webhook URL, or a Resend account with a verified sending domain and the recruiting inbox
+- Contact delivery: a CRM webhook URL, or Resend plus the general (and optional mortgage) inbox; optionally Turnstile keys
+- Business hours, and whether the office address may be published
 - Phone, email, recruiting email, office address (if publishing one)
 - Company NMLS ID and Florida license number once issued
 - Borrower application URL, scheduling URL, CRM choice
