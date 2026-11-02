@@ -26,7 +26,7 @@ import { company } from "@/config/company";
 import { homeContent } from "@/content/home";
 import { images } from "@/content/images";
 import { HomeHero } from "@/components/home/home-hero";
-import { IconListItem } from "@/components/home/icon-list-item";
+import { IconListItem } from "@/components/shared/icon-list-item";
 import { RecruitmentBand } from "@/components/home/recruitment-band";
 import { SolutionCard } from "@/components/home/solution-card";
 import { SectionContainer } from "@/components/layout/section-container";

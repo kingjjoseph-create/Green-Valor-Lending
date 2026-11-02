@@ -2,7 +2,7 @@ import type { LucideIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
-/** Compact icon + title + one-line description, used in homepage feature lists. */
+/** Compact icon + title + one-line description, used in feature lists. */
 export function IconListItem({
   icon: Icon,
   title,

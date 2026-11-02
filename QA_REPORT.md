@@ -1,5 +1,19 @@
 # QA Report
 
+## Phase 4: Residential Loans page (2026-11-02)
+
+These were actually run on a production build:
+
+- `npm run lint`, `tsc --noEmit` and `npm run build` are clean.
+- `npm test`: 74/74 pass. This adds `residential-content.test.ts`, which checks the approved copy, the broker/lender role split, that no unverified programs are listed, the non-affiliation wording, and that there are no rates, down-payment figures, dollar amounts or approval promises.
+- `tests/e2e/smoke.mjs` passes on 13 routes × 5 viewports. It adds residential checks: CTA hrefs, program headings, FAQ open/close by click and keyboard, axe and overflow with an FAQ open.
+- Lighthouse on /residential-loans: mobile 97/100/100/69, desktop 100/100/100/69. SEO is lower only because of the intentional noindex.
+- Details: `docs/visual-review/RESIDENTIAL_REVIEW.md`.
+
+## Phase 3: Homepage (2026-11-02)
+
+- Unit tests 67/67, smoke PASS, Lighthouse mobile 95/100/100/66 and desktop 100/100/100/66. See `docs/visual-review/HOMEPAGE_REVIEW.md`.
+
 ## Phase 2: Global layout and shared components (2026-11-02)
 
 Run on Node 22.23, Next 16.4.3. Every result below comes from a command that was actually run.

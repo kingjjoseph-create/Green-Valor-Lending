@@ -39,6 +39,10 @@
 
 **Done:** all nine homepage sections (hero, Who We Are, Mortgage Solutions, Why Green Valor, How It Works, Borrower Education, Loan Officer Support, Recruitment, Final CTA). Copy lives in `src/content/home.ts`; page-specific components are in `src/components/home/`. ProcessTimeline gained optional step icons. Entrance motion is now movement-only. CTAButton labels wrap on narrow screens. Visual review and Lighthouse reports are in `docs/visual-review/`.
 
+## Phase 4: Residential Loans page (2026-11-02)
+
+**Done:** `/residential-loans` with the hero, the broker vs. lender role comparison, Conventional/FHA/VA program cards, an "Other Residential Options" panel that lists no products until a partner verifies them, purchase vs. refinance, what lenders generally review, six FAQs, and the CTA. Copy is in `src/content/residential.ts`. Reusable loan components are in `src/components/loans/` (they will be reused for Non-QM). `IconListItem` moved to `components/shared`. Review is in `docs/visual-review/RESIDENTIAL_REVIEW.md`.
+
 **Placeholders to remove before launch** (search `data-placeholder`)
 
 - `PhasePlaceholder` blocks on interior pages
