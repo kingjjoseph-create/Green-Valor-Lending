@@ -36,7 +36,7 @@ npm run dev                  # http://localhost:3000
 - `src/config/company.ts`: **single source of truth** for company facts, licensing, URLs, CRM, social, products, brand messaging
 - `src/config/features.ts`: feature flags (conservative defaults)
 - `src/config/navigation.ts`: header, footer and legal navigation, plus the route list used by the sitemap and tests
-- `src/config/brand-assets.ts`: official logo registry (logos pending)
+- `src/config/brand-assets.ts`: official logo registry
 - `src/content/disclosures.ts`: draft disclosure language (pending compliance review)
 
 See [ARCHITECTURE.md](./ARCHITECTURE.md) for the full structure and conventions.

@@ -66,7 +66,7 @@ for (const viewport of [
     }
   }
 
-  if (viewport.name === "mobile") {
+  if (viewport.name !== "desktop") {
     await page.goto(BASE + "/");
     await page.getByRole("button", { name: "Open menu" }).click();
     const dialog = page.getByRole("dialog");
@@ -102,4 +102,4 @@ if (failures.length) {
   console.error(`FAIL (${failures.length})\n- ` + failures.join("\n- "));
   process.exit(1);
 }
-console.log(`PASS: ${routes.length} routes x 2 viewports, nav, a11y (axe), robots`);
+console.log(`PASS: ${routes.length} routes x 3 viewports (1440, 1024, 390), nav, a11y (axe), robots`);

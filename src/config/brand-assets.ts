@@ -1,23 +1,25 @@
 /**
- * Official logo files. The business has not uploaded them yet.
+ * Official Green Valor Lending logo files (supplied by the business 2026-11-02).
  *
- * When the files arrive, place them in /public/logos using these names, set
- * `available: true`, and fill in each file's intrinsic width/height so
- * next/image preserves the aspect ratio (logos must never be stretched,
- * recolored or distorted).
+ * Files in /public/logos were prepared from the originals by trimming the
+ * surrounding white space and making the white background transparent.
+ * Logo artwork and colors are unchanged. Width/height are the files'
+ * intrinsic sizes so next/image preserves the aspect ratio: logos must never
+ * be stretched, recolored or distorted.
  *
- * Until then, <Logo /> renders a clearly marked text wordmark placeholder.
+ * No reversed (light-on-dark) version has been supplied, so on dark
+ * backgrounds the logo sits on a light plate. Add a `horizontal-reversed`
+ * entry here if one is provided.
  */
-export type LogoVariant = "horizontal" | "stacked" | "mark" | "horizontal-reversed";
+export type LogoVariant = "horizontal" | "stacked" | "mark";
 
 export type LogoAsset = { src: string; width: number; height: number };
 
 export const brandAssets: { available: boolean; logos: Partial<Record<LogoVariant, LogoAsset>> } = {
-  available: false,
+  available: true,
   logos: {
-    // horizontal: { src: "/logos/green-valor-horizontal.svg", width: 0, height: 0 },
-    // "horizontal-reversed": { src: "/logos/green-valor-horizontal-reversed.svg", width: 0, height: 0 },
-    // stacked: { src: "/logos/green-valor-stacked.svg", width: 0, height: 0 },
-    // mark: { src: "/logos/green-valor-mark.svg", width: 0, height: 0 },
+    horizontal: { src: "/logos/green-valor-horizontal.png", width: 1400, height: 349 },
+    stacked: { src: "/logos/green-valor-stacked.png", width: 1000, height: 698 },
+    mark: { src: "/logos/green-valor-mark.png", width: 666, height: 470 },
   },
 };

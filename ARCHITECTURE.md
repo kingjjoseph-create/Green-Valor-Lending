@@ -12,7 +12,7 @@
 
 ```
 src/
-  app/                    Routes (App Router). One folder per page, plus robots.ts, sitemap.ts, icon.svg, not-found.tsx
+  app/                    Routes (App Router). One folder per page, plus robots.ts, sitemap.ts, icon.png, apple-icon.png, not-found.tsx
   components/
     layout/               Header, footer, nav, logo, container/section, page intro, phase placeholder, skip link
     ui/                   shadcn/ui primitives (button, sheet, separator)
@@ -22,8 +22,8 @@ src/
   lib/                    utils (cn), company helpers, metadata helper
   styles/globals.css      Tailwind 4 theme + brand design tokens
 public/
-  logos/                  Official logo files (pending from the business)
-  images/                 Licensed photography (pending)
+  logos/                  Official logo files
+  images/                 og-default.png; licensed photography (pending)
 tests/
   unit/                   Vitest
   e2e/smoke.mjs           Playwright + axe-core smoke test
@@ -60,11 +60,11 @@ Typography: **Cormorant Garamond** (display serif, h1 to h3) + **Inter** (body/U
 
 ## Logos
 
-`<Logo />` reads `src/config/brand-assets.ts`. With `available: false` it renders a text wordmark marked `data-placeholder="logo"`. When official files arrive: add them to `public/logos/`, register each variant with its intrinsic width/height, set `available: true`. Logos render through `next/image` at a fixed height with `width: auto`, so the aspect ratio is preserved and the file is never recolored.
+`<Logo variant="horizontal" | "stacked" | "mark" />` reads `src/config/brand-assets.ts` and renders through `next/image` at a fixed height with `width: auto`, so the aspect ratio is preserved. Files live in `public/logos/` (transparent PNGs prepared from the official files; artwork unchanged). Favicon `src/app/icon.png` and `src/app/apple-icon.png` come from the official files too. No reversed logo exists yet, so on Primary Green the logo sits on a white plate. A unit test checks each registered size matches the file.
 
 ## Metadata
 
-Root layout sets `metadataBase`, a title template (`%s | Green Valor Lending`), default description, robots (noindex until launch) and Open Graph defaults. Pages use `pageMetadata({ title, description, path })` for canonical URL + Open Graph.
+Root layout sets `metadataBase`, a title template (`%s | Green Valor Lending`), default description, robots (noindex until launch) and Open Graph defaults including the default share image. Pages use `pageMetadata({ title, description, path })` for canonical URL + Open Graph.
 
 ## Substitutions from the directive
 

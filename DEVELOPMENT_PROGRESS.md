@@ -14,16 +14,20 @@
 - Unit tests (15) and browser smoke/accessibility test (12 routes x desktop + mobile)
 - Tracking docs and `.env.example`
 
+## Phase 1.1: Official logos (2026-11-02)
+
+- Added the official logos supplied by Green Valor: horizontal (header, footer), stacked (social share image), GV mark (mobile menu, Apple touch icon), and the 64px favicon.
+- Prepared files by trimming surrounding white space and making the white background transparent. Artwork and colors are unchanged; aspect ratios are enforced by a unit test.
+- No reversed (light-on-dark) logo exists yet, so the footer shows the logo on a white plate.
+- Default Open Graph image (`public/images/og-default.png`) applied to every page.
+
 **Placeholders to remove before launch** (search `data-placeholder`)
 
-- Text wordmark in place of the official logo (`src/components/layout/logo.tsx`)
-- Placeholder favicon (`src/app/icon.svg`)
 - `PhasePlaceholder` blocks on every interior page and the home page
 
 ## Needed from Green Valor
 
-- Official logo files (horizontal, reversed/white, stacked, mark) in SVG or high-res PNG
-- GitHub repository for the project
+- Optional: a reversed (white/gold) logo for dark backgrounds, and SVG versions of the logos for the sharpest rendering
 - Phone, email, recruiting email, office address (if publishing one)
 - Company NMLS ID and Florida license number once issued
 - Borrower application URL, scheduling URL, CRM choice

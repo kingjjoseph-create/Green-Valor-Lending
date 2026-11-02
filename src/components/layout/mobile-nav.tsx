@@ -16,6 +16,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
+import { Logo } from "./logo";
 import { isActive } from "./main-nav";
 
 export function MobileNav({ items, cta, tagline }: { items: NavItem[]; cta: NavItem; tagline: string }) {
@@ -25,11 +26,14 @@ export function MobileNav({ items, cta, tagline }: { items: NavItem[]; cta: NavI
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="lg:hidden" aria-label="Open menu">
+        <Button variant="ghost" size="icon" className="xl:hidden" aria-label="Open menu">
           <MenuIcon className="size-6" aria-hidden="true" />
         </Button>
       </SheetTrigger>
-      <SheetContent side="right" className="px-6 pt-16 pb-8">
+      <SheetContent side="right" className="px-6 pt-6 pb-8">
+        <SheetClose asChild>
+          <Logo variant="mark" height={48} className="self-start" />
+        </SheetClose>
         <SheetTitle className="sr-only">Site menu</SheetTitle>
         <SheetDescription className="sr-only">Navigate Green Valor Lending</SheetDescription>
         <nav aria-label="Mobile" className="flex-1">

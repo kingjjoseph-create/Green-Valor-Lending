@@ -7,6 +7,7 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SkipLink } from "@/components/layout/skip-link";
 import { getSiteUrl } from "@/lib/company";
+import { defaultOgImage } from "@/lib/metadata";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 const cormorant = Cormorant_Garamond({
@@ -29,6 +30,7 @@ export const metadata: Metadata = {
     siteName: company.displayName,
     locale: "en_US",
     type: "website",
+    images: [defaultOgImage],
   },
   formatDetection: { telephone: false, email: false, address: false },
 };
