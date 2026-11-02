@@ -1,0 +1,125 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/*
+ * Green Valor Lending design tokens.
+ * Brand palette (do not alter):
+ *   Primary Green #02331D · Gold #BD870B · Forest Green #14452F
+ *   Warm Ivory #F5F0E4 · Charcoal #202824 · White #FFFFFF
+ * shadcn/ui semantic tokens are mapped onto the brand palette below so
+ * every primitive inherits the brand automatically.
+ */
+
+:root {
+  --gv-green: #02331d;
+  --gv-gold: #bd870b;
+  --gv-forest: #14452f;
+  --gv-ivory: #f5f0e4;
+  --gv-charcoal: #202824;
+  --gv-white: #ffffff;
+  /*
+   * Text-only gold tints so small gold labels meet WCAG AA (4.5:1). Brand Gold
+   * #BD870B is used unchanged for fills, rules and large display text.
+   *   gold-deep   #8A6208 on white 5.5:1, on ivory 4.8:1
+   *   gold-bright #C9962A on primary green 5.3:1 (brand gold there is 4.4:1)
+   */
+  --gv-gold-deep: #8a6208;
+  --gv-gold-bright: #c9962a;
+
+  --radius: 0.5rem;
+
+  --background: var(--gv-white);
+  --foreground: var(--gv-charcoal);
+  --card: var(--gv-white);
+  --card-foreground: var(--gv-charcoal);
+  --popover: var(--gv-white);
+  --popover-foreground: var(--gv-charcoal);
+  --primary: var(--gv-green);
+  --primary-foreground: var(--gv-white);
+  --secondary: var(--gv-ivory);
+  --secondary-foreground: var(--gv-green);
+  --muted: var(--gv-ivory);
+  /* 8.0:1 on white, 7.1:1 on ivory. */
+  --muted-foreground: #4a524e;
+  --accent: var(--gv-gold);
+  /* Charcoal on gold is 4.8:1; white on gold is 3.2:1, so never put white text on gold. */
+  --accent-foreground: var(--gv-charcoal);
+  --destructive: #b42318;
+  --border: #e3dccb;
+  --input: #d6cdb8;
+  --ring: var(--gv-gold);
+}
+
+@theme inline {
+  --color-gv-green: var(--gv-green);
+  --color-gv-gold: var(--gv-gold);
+  --color-gv-forest: var(--gv-forest);
+  --color-gv-ivory: var(--gv-ivory);
+  --color-gv-charcoal: var(--gv-charcoal);
+  --color-gv-gold-deep: var(--gv-gold-deep);
+  --color-gv-gold-bright: var(--gv-gold-bright);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-cormorant), ui-serif, Georgia, serif;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background font-sans text-foreground antialiased;
+  }
+  h1,
+  h2,
+  h3 {
+    @apply font-serif tracking-tight text-gv-green;
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-ring;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
