@@ -12,7 +12,7 @@ export function IconListItem({
 }: {
   icon: LucideIcon;
   title: string;
-  description: string;
+  description: React.ReactNode;
   badge?: string;
   className?: string;
 }) {

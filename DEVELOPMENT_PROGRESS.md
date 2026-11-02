@@ -43,6 +43,10 @@
 
 **Done:** `/residential-loans` with the hero, the broker vs. lender role comparison, Conventional/FHA/VA program cards, an "Other Residential Options" panel that lists no products until a partner verifies them, purchase vs. refinance, what lenders generally review, six FAQs, and the CTA. Copy is in `src/content/residential.ts`. Reusable loan components are in `src/components/loans/` (they will be reused for Non-QM). `IconListItem` moved to `components/shared`. Review is in `docs/visual-review/RESIDENTIAL_REVIEW.md`.
 
+## Phase 5: Non-QM page (2026-11-02)
+
+**Done:** `/non-qm` with a green hero, the "What is Non-QM?" overview, Bank Statement / DSCR / 1099 program cards, an "Other alternative documentation options" panel that lists no products until verified, who may benefit, a Traditional vs. Non-QM comparison (table on desktop, stacked cards on mobile), a five-step process, six FAQs, and the CTA. Copy is in `src/content/non-qm.ts`. New: `components/loans/comparison-table.tsx` and the `lib/keep-together.tsx` no-wrap helper. Review is in `docs/visual-review/NON_QM_REVIEW.md`.
+
 **Placeholders to remove before launch** (search `data-placeholder`)
 
 - `PhasePlaceholder` blocks on interior pages
