@@ -14,6 +14,7 @@
     "test:e2e:careers": "node tests/e2e/careers-submit.mjs",
     "test:e2e:contact": "node tests/e2e/contact-submit.mjs",
     "test:e2e:inquiry": "node tests/e2e/inquiry-submit.mjs",
+    "launch:check": "node scripts/launch-check.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "check": "npm run lint && npm run typecheck && npm run test && npm run build"

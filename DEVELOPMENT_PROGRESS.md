@@ -67,6 +67,20 @@ The form (`components/careers/recruitment-form.tsx`) posts to a dedicated endpoi
 
 The form (`components/contact/contact-form.tsx`) posts to `POST /api/contact`. Validation is shared (`src/lib/contact/schema.ts`). Spam protection (`src/lib/contact/spam.ts`) uses a honeypot, a minimum fill time, optional Cloudflare Turnstile and duplicate suppression, with a per-IP rate limit. Delivery (`src/lib/contact/deliver.ts`) goes to a signed CRM webhook and/or Resend email, classified as `mortgage_inquiry` or `general_inquiry`, with optional separate mortgage inbox. "Career Opportunity" sends visitors to the Careers recruitment form. Shared request guards and delivery helpers now live in `src/lib/forms/`, and the recruitment endpoint uses them too. Review is in `docs/visual-review/CONTACT_REVIEW.md`.
 
+## Phase 11: Legal, licensing and compliance (2026-11-02)
+
+**Done:** `/licensing`, `/privacy-policy`, `/terms-of-use`, `/consumer-complaints` and `/accessibility`, replacing the placeholders. The old `/privacy`, `/terms` and `/complaints` URLs redirect permanently. Copy is in `src/content/legal/`; regulator details (Florida OFR, CFPB, NMLS Consumer Access) are in `src/content/regulators.ts` with their official sources and verification date. Pages are rendered by `components/legal/legal-document.tsx`.
+
+**Publication guard:** `src/lib/release-blockers.mjs` defines the release blockers, and `src/config/compliance-approvals.json` records sign-offs (reviewer and date required). The rules are shared by the site (`src/lib/compliance.ts`), `next.config.ts` and `npm run launch:check`. While licensing is unverified or any sign-off is missing:
+
+- every page shows a licensing notice;
+- the site is never indexed;
+- the ARIVE application button is hidden;
+- the legal pages are labeled as drafts;
+- a build with `NEXT_PUBLIC_ALLOW_INDEXING=true` fails.
+
+COMPLIANCE_REVIEW.md now holds the page-by-page advertising review table (requirement, authority, page, status, required correction, reviewer, approval date). Review is in `docs/visual-review/LEGAL_REVIEW.md`.
+
 ## Phase 10: Get Started page (2026-11-02)
 
 **Done:** `/get-started` with the hero, a four-step mortgage inquiry wizard and a "What to expect" panel. Copy is in `src/content/get-started.ts`. This is a lead intake form, not a loan application: it never asks for a Social Security number, date of birth, account numbers, tax returns, paystubs, a driver's license or a credit report, and the server rejects free text that looks like an SSN or account/card number.
@@ -75,7 +89,6 @@ The wizard (`components/get-started/inquiry-wizard.tsx`) has a progress indicato
 
 **Placeholders to remove before launch** (search `data-placeholder`)
 
-- `PhasePlaceholder` blocks on interior pages
 - Decorative image panels (`data-placeholder="image"`) until licensed photography is added
 
 ## Needed from Green Valor
@@ -87,7 +100,8 @@ The wizard (`components/get-started/inquiry-wizard.tsx`) has a progress indicato
 - Contact delivery: a CRM webhook URL, or Resend plus the general (and optional mortgage) inbox; optionally Turnstile keys
 - Business hours, and whether the office address may be published
 - Phone, email, recruiting email, office address (if publishing one)
-- Company NMLS ID and Florida license number once issued
+- Company NMLS ID and Florida license number once issued, plus confirmation that the license is active (recorded in `src/config/compliance-approvals.json`)
+- Counsel sign-off on each row of the COMPLIANCE_REVIEW.md table, and a decision on whether inquiry forms may run before licensing
 - Borrower application URL, scheduling URL, CRM choice
 - Social media URLs
 - Licensed photography for the slots in docs/IMAGE_LICENSES.md, or approval to purchase stock (my build environment cannot reach stock photo sites)

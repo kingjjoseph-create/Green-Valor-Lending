@@ -1,5 +1,21 @@
 # QA Report
 
+## Phase 11: Legal, licensing and compliance (2026-11-02)
+
+These were actually run on a production build:
+
+- `npm run lint`, `tsc --noEmit` and `npm run build` are clean. `npm test` passes (335 tests).
+- New unit tests:
+  - `release-blockers.test.ts`: NMLS ID, date and approval rules; a pending ID or status never counts as licensed; every listed blocker; nothing pre-approved; indexing forced off; public build throws; redirects.
+  - `legal-pages.test.tsx`: all five pages render with a draft banner and no placeholder; Licensing shows "Not yet issued" and pending status; regulator links are https on official hosts; NMLS link is the home page only.
+  - Complaints channels; verified contact only.
+  - Privacy topics; no encryption, retention or certification claims; no analytics packages, cookies or storage writes in the code.
+  - Terms topics; accessibility claims; the site notice.
+- `NEXT_PUBLIC_ALLOW_INDEXING=true next build` fails with the 9 blockers listed (checked by hand and in the unit tests). `npm run launch:check` lists the same 9 and exits 1.
+- `tests/e2e/smoke.mjs` passes on 13 routes × 5 viewports. New checks: the licensing notice on every page, no application link, a draft banner on each legal page, axe, and 308 redirects from the old legal URLs.
+- `inquiry-submit.mjs` (ARIVE off), `contact-submit.mjs` and `careers-submit.mjs` pass. The ARIVE-on run now needs a build with verified licensing, so the unit test covers the guard instead.
+- Lighthouse on /licensing: mobile 97/100/100/69, desktop 100/100/100/69.
+
 ## Phase 10: Get Started page (2026-11-02)
 
 These were actually run on a production build:

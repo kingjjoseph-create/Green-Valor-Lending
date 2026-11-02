@@ -24,7 +24,13 @@ describe("routes", () => {
   });
 
   it("includes the legal and licensing pages", () => {
-    for (const r of ["/licensing", "/privacy", "/terms", "/accessibility", "/complaints"]) {
+    for (const r of [
+      "/licensing",
+      "/privacy-policy",
+      "/terms-of-use",
+      "/accessibility",
+      "/consumer-complaints",
+    ]) {
       expect(allRoutes).toContain(r);
     }
   });

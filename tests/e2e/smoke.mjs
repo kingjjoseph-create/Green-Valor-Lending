@@ -33,11 +33,18 @@ const routes = [
   "/contact",
   "/get-started",
   "/licensing",
-  "/privacy",
-  "/terms",
+  "/privacy-policy",
+  "/terms-of-use",
   "/accessibility",
-  "/complaints",
+  "/consumer-complaints",
   ...(STYLEGUIDE ? ["/styleguide"] : []),
+];
+const LEGAL_ROUTES = [
+  "/licensing",
+  "/privacy-policy",
+  "/terms-of-use",
+  "/accessibility",
+  "/consumer-complaints",
 ];
 const navTitles = [
   "Home",
@@ -100,6 +107,12 @@ for (const viewport of viewports) {
       fail(`${label}: placeholder value rendered`);
     if (/NMLS\s*#/i.test(text)) fail(`${label}: NMLS number shown while none is configured`);
     if (/Equal Housing/i.test(text)) fail(`${label}: Equal Housing shown before approval`);
+    // Publication guard: licensing is unverified, so every page carries the notice.
+    if (!(await page.getByTestId("licensing-notice").isVisible())) fail(`${label}: licensing notice missing`);
+    if (/Start Your Secure Mortgage Application/.test(text))
+      fail(`${label}: application link shown before licensing`);
+    if (LEGAL_ROUTES.includes(route) && !(await page.getByTestId("legal-draft-banner").isVisible()))
+      fail(`${label}: legal page missing its draft banner`);
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
     if (overflow > 0) fail(`${label}: horizontal overflow ${overflow}px`);
     await axe(page, label);
@@ -719,10 +732,19 @@ for (const viewport of viewports) {
   await context.close();
 }
 
+for (const [from, to] of [
+  ["/privacy", "/privacy-policy"],
+  ["/terms", "/terms-of-use"],
+  ["/complaints", "/consumer-complaints"],
+]) {
+  const r = await fetch(BASE + from, { redirect: "manual" });
+  if (r.status !== 308 || !r.headers.get("location")?.endsWith(to))
+    fail(`${from} should redirect to ${to} (got ${r.status})`);
+}
 const robots = await (await fetch(BASE + "/robots.txt")).text();
 if (!/Disallow: \//.test(robots)) fail("robots.txt should block crawling before launch");
 const sitemap = await (await fetch(BASE + "/sitemap.xml")).text();
-if (!sitemap.includes("/complaints")) fail("sitemap missing /complaints");
+if (!sitemap.includes("/consumer-complaints")) fail("sitemap missing /consumer-complaints");
 if (sitemap.includes("/styleguide")) fail("sitemap must not list /styleguide");
 if (!STYLEGUIDE) {
   const sg = await fetch(BASE + "/styleguide");
@@ -736,5 +758,5 @@ if (failures.length) {
 }
 console.log(
   `PASS: ${routes.length} routes x ${viewports.length} viewports (${viewports.map((v) => v.width).join("/")}), ` +
-    "header/drawer keyboard + scroll lock, footer links, logo scaling, careers CTAs/preselection/validation, contact info/validation/career routing, get-started wizard, axe (WCAG 2.1 AA + best practice), motion, robots/sitemap",
+    "header/drawer keyboard + scroll lock, footer links, logo scaling, careers CTAs/preselection/validation, contact info/validation/career routing, get-started wizard, axe (WCAG 2.1 AA + best practice), licensing notice + legal draft banners, legacy legal redirects, motion, robots/sitemap",
 );

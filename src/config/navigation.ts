@@ -23,10 +23,10 @@ export const primaryCta: NavItem = { title: "Get Started", href: "/get-started" 
 /** Supporting legal and licensing pages. */
 export const legalNav: NavItem[] = [
   { title: "Licensing", href: "/licensing" },
-  { title: "Privacy Policy", href: "/privacy" },
-  { title: "Terms of Use", href: "/terms" },
+  { title: "Privacy Policy", href: "/privacy-policy" },
+  { title: "Terms of Use", href: "/terms-of-use" },
   { title: "Accessibility", href: "/accessibility" },
-  { title: "Consumer Complaints", href: "/complaints" },
+  { title: "Consumer Complaints", href: "/consumer-complaints" },
 ];
 
 export const nmlsConsumerAccess: NavItem = {

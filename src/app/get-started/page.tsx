@@ -6,6 +6,7 @@ import { InquiryWizard } from "@/components/get-started/inquiry-wizard";
 import { PageHero } from "@/components/layout/page-hero";
 import { SectionContainer } from "@/components/layout/section-container";
 import { IconListItem } from "@/components/shared/icon-list-item";
+import { licenseVerified } from "@/lib/compliance";
 import { pageMetadata } from "@/lib/metadata";
 
 export const metadata = pageMetadata({
@@ -17,9 +18,12 @@ export const metadata = pageMetadata({
 
 const asideIcons = [Clock, ShieldCheck, MessagesSquare, MapPinned];
 
-/** Only an https portal URL is linked (ARIVE borrower portal). */
+/**
+ * Only an https portal URL is linked (ARIVE borrower portal), and only once
+ * licensing is verified: no mortgage applications are taken before then.
+ */
 function approvedApplicationUrl(url: string | null): string | null {
-  if (!url) return null;
+  if (!url || !licenseVerified) return null;
   try {
     return new URL(url).protocol === "https:" ? url : null;
   } catch {

@@ -1,7 +1,9 @@
 /**
  * End-to-end Get Started submissions against a running production server with
  * a mock CRM. Start the server with INQUIRY_WEBHOOK_URL=http://127.0.0.1:<MOCK_PORT>/hook
- * (and NEXT_PUBLIC_BORROWER_APPLICATION_URL set or unset to match ARIVE=on|off).
+ * (and NEXT_PUBLIC_BORROWER_APPLICATION_URL set or unset to match ARIVE=on|off). The ARIVE
+ * button also requires verified licensing (publication guard), so ARIVE=on passes only on a
+ * build where licensing is recorded as verified; until then run ARIVE=off.
  * Usage: SMOKE_BASE_URL=http://localhost:3000 MOCK_PORT=4097 ARIVE=off node tests/e2e/inquiry-submit.mjs
  *
  * Checks: valid submission, record classification, double-click sends once,
