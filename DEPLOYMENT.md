@@ -5,7 +5,7 @@
 1. Push the repository to GitHub.
 2. In Vercel, **Add New Project** and import the repository. Framework preset: Next.js (auto-detected). No build overrides needed.
 3. Add environment variables from `.env.example` under **Settings, Environment Variables**. Fill only confirmed values; blank values are hidden on the site.
-4. Keep `NEXT_PUBLIC_ALLOW_INDEXING=false` on Preview and on Production until launch sign-off.
+4. Keep `NEXT_PUBLIC_ALLOW_INDEXING=false` on Preview and on Production until launch sign-off. While any release blocker remains, a build with it set to `true` (or with `LAUNCH_CHECK=strict`) fails on purpose and lists the blockers.
 5. Deploy. Every pull request gets a Preview deployment.
 
 ## Get Started inquiries (/get-started)
@@ -17,7 +17,7 @@ The four-step wizard posts to `/api/inquiry`. It is a preliminary lead intake, n
 | `INQUIRY_WEBHOOK_URL`                    | CRM endpoint. Receives a JSON `mortgage_inquiry` record (`category: "borrower_lead"`) with `classification` (goal, product interest, transaction, occupancy, follow-up priority), `property`, `financing` and `contact`. |
 | `INQUIRY_WEBHOOK_SECRET`                 | Optional HMAC signature, same format as the other webhooks.                                                                                                                                                              |
 | `INQUIRY_EMAIL_FROM`, `INQUIRY_EMAIL_TO` | Email notification through Resend (`RESEND_API_KEY`). Fall back to the contact settings.                                                                                                                                 |
-| `NEXT_PUBLIC_BORROWER_APPLICATION_URL`   | Approved ARIVE borrower portal (https). Shown on the confirmation only when set.                                                                                                                                         |
+| `NEXT_PUBLIC_BORROWER_APPLICATION_URL`   | Approved ARIVE borrower portal (https). Shown on the confirmation only when set and licensing is verified.                                                                                                               |
 
 - Server order: validate, spam checks (honeypot, minimum fill time, optional Turnstile), classify, deliver/notify, then answer. `{ ok: true }` means at least one channel accepted the inquiry; the confirmation is shown only then. If one channel fails and another succeeds, the failure is logged by channel name (no applicant data).
 - Florida only: any other state is rejected on the client and the server with an explanation.
@@ -60,7 +60,9 @@ The careers form posts to its own endpoint, `/api/recruitment`, which is separat
 
 ## Launch checklist
 
-- [ ] All items in COMPLIANCE_REVIEW.md resolved
+- [ ] All items in COMPLIANCE_REVIEW.md resolved, each with a reviewer and approval date
+- [ ] Licensing verified on NMLS Consumer Access and the Florida OFR license search, and recorded in `src/config/compliance-approvals.json`
+- [ ] `npm run launch:check` reports no release blockers (run it with the Production environment variables)
 - [ ] No `data-placeholder` elements remain
 - [ ] Get Started delivery configured, a test inquiry received, and the ARIVE link verified
 - [ ] Contact delivery configured and a test message received in the right inbox
@@ -69,6 +71,17 @@ The careers form posts to its own endpoint, `/api/recruitment`, which is separat
 - [ ] `NEXT_PUBLIC_SITE_URL` set to the production domain; custom domain configured in Vercel
 - [ ] `npm run check` and `npm run test:e2e` pass on the release commit
 - [ ] Set `NEXT_PUBLIC_ALLOW_INDEXING=true` on Production only, redeploy, submit sitemap
+
+## Publication guard
+
+Until licensing is verified and every sign-off is recorded (`src/lib/release-blockers.mjs`):
+
+- Every page shows a licensing notice.
+- The site is never indexed.
+- The ARIVE application button is hidden.
+- The legal pages show a "Draft for legal review" banner.
+
+The old legal URLs `/privacy`, `/terms` and `/complaints` permanently redirect to `/privacy-policy`, `/terms-of-use` and `/consumer-complaints`.
 
 ## Notes
 

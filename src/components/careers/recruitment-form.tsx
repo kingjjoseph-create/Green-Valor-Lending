@@ -515,7 +515,7 @@ export function RecruitmentForm({ requestedPathway }: { requestedPathway?: strin
           <span className="type-support text-gv-charcoal">
             I agree that Green Valor Lending may contact me about career opportunities using the information I
             provided, and I have read the{" "}
-            <Link href="/privacy" className="font-semibold text-gv-green underline underline-offset-2">
+            <Link href="/privacy-policy" className="font-semibold text-gv-green underline underline-offset-2">
               Privacy Policy
             </Link>
             . I understand this is a career inquiry, not a mortgage application, and that submitting it does

@@ -8,6 +8,8 @@ import { Header } from "@/components/layout/header";
 import { SkipLink } from "@/components/layout/skip-link";
 import { getSiteUrl } from "@/lib/company";
 import { defaultOgImage } from "@/lib/metadata";
+import { indexingAllowed, licenseVerified } from "@/lib/compliance";
+import { LicensingNotice } from "@/components/layout/licensing-notice";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 const cormorant = Cormorant_Garamond({
@@ -25,7 +27,7 @@ export const metadata: Metadata = {
   },
   description: company.description,
   applicationName: company.displayName,
-  robots: company.features.allowIndexing ? { index: true, follow: true } : { index: false, follow: false },
+  robots: indexingAllowed ? { index: true, follow: true } : { index: false, follow: false },
   openGraph: {
     siteName: company.displayName,
     locale: "en_US",
@@ -44,6 +46,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="en" className={`${inter.variable} ${cormorant.variable} h-full`}>
       <body className="flex min-h-full flex-col">
         <SkipLink />
+        {!licenseVerified && <LicensingNotice />}
         <Header />
         <main id="main-content" tabIndex={-1} className="flex-1 focus:outline-none">
           {children}

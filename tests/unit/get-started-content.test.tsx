@@ -33,9 +33,10 @@ describe("Get Started content", () => {
 });
 
 describe("Get Started page ARIVE link", () => {
-  async function successLinkFor(url: string) {
+  async function successLinkFor(url: string, licenseVerified = true) {
     vi.stubEnv("NEXT_PUBLIC_BORROWER_APPLICATION_URL", url);
     vi.resetModules();
+    vi.doMock("@/lib/compliance", () => ({ licenseVerified }));
     const { default: Page } = await import("@/app/get-started/page");
     const tree = Page();
     // The wizard receives only an approved (https) URL.
@@ -62,8 +63,13 @@ describe("Get Started page ARIVE link", () => {
     expect(await successLinkFor("")).toBeNull();
   });
 
+  it("hides the application link until licensing is verified (publication guard)", async () => {
+    expect(await successLinkFor("https://greenvalor.arive.com/apply", false)).toBeNull();
+  });
+
   it("renders the page heading", async () => {
     vi.resetModules();
+    vi.doUnmock("@/lib/compliance");
     const { default: Page } = await import("@/app/get-started/page");
     render(<Page />);
     expect(screen.getByRole("heading", { level: 1, name: "Let's Find Your Next Step." })).toBeTruthy();

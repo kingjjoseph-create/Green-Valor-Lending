@@ -1,0 +1,15 @@
+{
+  "_readme": "Launch sign-offs. An item counts as approved only when approved is true AND reviewer and date (YYYY-MM-DD) are filled in. Record the reviewer's name and role, never credentials. See COMPLIANCE_REVIEW.md.",
+  "licenseVerification": {
+    "status": "pending",
+    "verifiedOn": null,
+    "reviewer": null,
+    "_note": "Set status to \"active\" only after confirming the company record on NMLS Consumer Access and the Florida OFR license search. A pending NMLS ID is not an active license."
+  },
+  "legalContent": { "approved": false, "reviewer": null, "date": null },
+  "privacyPractices": { "approved": false, "reviewer": null, "date": null },
+  "formConsent": { "approved": false, "reviewer": null, "date": null },
+  "loanProducts": { "approved": false, "reviewer": null, "date": null },
+  "disclosures": { "approved": false, "reviewer": null, "date": null },
+  "advertisingReview": { "approved": false, "reviewer": null, "date": null }
+}

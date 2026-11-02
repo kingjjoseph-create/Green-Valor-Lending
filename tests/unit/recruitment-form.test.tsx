@@ -171,6 +171,8 @@ describe("RecruitmentForm", () => {
   it("states it is not a mortgage application and links the privacy policy", () => {
     render(<RecruitmentForm />);
     expect(screen.getAllByText(/not a mortgage application/i).length).toBeGreaterThan(0);
-    expect(screen.getByRole("link", { name: /privacy policy/i }).getAttribute("href")).toBe("/privacy");
+    expect(screen.getByRole("link", { name: /privacy policy/i }).getAttribute("href")).toBe(
+      "/privacy-policy",
+    );
   });
 });

@@ -391,7 +391,10 @@ export function ContactForm() {
               <span className="type-support text-gv-charcoal">
                 I agree that Green Valor Lending may contact me by email or phone about this inquiry using the
                 information I provided, and I have read the{" "}
-                <Link href="/privacy" className="font-semibold text-gv-green underline underline-offset-2">
+                <Link
+                  href="/privacy-policy"
+                  className="font-semibold text-gv-green underline underline-offset-2"
+                >
                   Privacy Policy
                 </Link>
                 . I understand this message is not a loan application and does not lock a rate or guarantee

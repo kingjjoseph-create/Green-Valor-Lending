@@ -1,23 +1,30 @@
+import { accessibilityContent as c } from "@/content/legal/accessibility";
 import { PageHero } from "@/components/layout/page-hero";
-import { PhasePlaceholder } from "@/components/layout/phase-placeholder";
+import { SectionContainer } from "@/components/layout/section-container";
+import { LegalDocument } from "@/components/legal/legal-document";
+import { ContactDetails } from "@/components/legal/contact-details";
+import { legalContentApprovedOn } from "@/lib/compliance";
 import { pageMetadata } from "@/lib/metadata";
 
-export const metadata = pageMetadata({
-  title: "Accessibility",
-  description: "Our commitment to an accessible website for all visitors.",
-  path: "/accessibility",
-});
+export const metadata = pageMetadata({ title: c.title, description: c.description, path: "/accessibility" });
 
-export default function Page() {
+export default function AccessibilityPage() {
   return (
     <>
       <PageHero
-        breadcrumbs={[{ title: "Accessibility", href: "/accessibility" }]}
-        eyebrow="Legal"
-        title="Accessibility Statement"
-        description="Our commitment to an accessible website for all visitors."
+        breadcrumbs={[{ title: c.title, href: "/accessibility" }]}
+        eyebrow={c.eyebrow}
+        title={c.title}
+        description={c.description}
       />
-      <PhasePlaceholder note="Draft legal content is being prepared for compliance review before launch." />
+      <SectionContainer spacing="compact" reveal={false}>
+        <LegalDocument
+          sections={c.sections}
+          approvedOn={legalContentApprovedOn}
+          draftNote={c.draftNote}
+          slots={{ feedback: <ContactDetails /> }}
+        />
+      </SectionContainer>
     </>
   );
 }

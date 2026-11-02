@@ -1,11 +1,11 @@
 import type { MetadataRoute } from "next";
 
-import { company } from "@/config/company";
+import { indexingAllowed } from "@/lib/compliance";
 import { getSiteUrl } from "@/lib/company";
 
-/** Blocks all crawling until NEXT_PUBLIC_ALLOW_INDEXING=true at launch. */
+/** Blocks all crawling until launch sign-off is complete AND NEXT_PUBLIC_ALLOW_INDEXING=true. */
 export default function robots(): MetadataRoute.Robots {
-  if (!company.features.allowIndexing) {
+  if (!indexingAllowed) {
     return { rules: { userAgent: "*", disallow: "/" } };
   }
   return {
