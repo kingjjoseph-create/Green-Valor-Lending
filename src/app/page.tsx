@@ -156,10 +156,10 @@ export default function HomePage() {
       <SectionContainer aria-labelledby="home-education" spacing="spacious">
         <div className="grid items-center gap-14 lg:grid-cols-2 lg:gap-20">
           <ResponsiveImage
-            image={images.businessMeeting}
+            image={images.floridaHome}
             aspect="4/3"
             sizes="(min-width: 1024px) 45vw, 100vw"
-            className={cn("order-last lg:order-first", !images.businessMeeting && "max-lg:hidden")}
+            className={cn("order-last lg:order-first", !images.floridaHome && "max-lg:hidden")}
           />
           <div>
             <SectionHeading
