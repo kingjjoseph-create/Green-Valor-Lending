@@ -456,6 +456,94 @@ for (const viewport of viewports) {
     }
   }
 
+  // Careers: CTAs, pathway preselection, client validation, no mortgage fields, mobile usability.
+  // (No submission here; tests/e2e/careers-submit.mjs covers delivery against a mock receiver.)
+  {
+    const v = viewport.name;
+    await page.goto(BASE + "/careers", { waitUntil: "networkidle" });
+    const main = page.locator("main");
+    const careerLinks = {
+      "Apply to Join Our Team": "#apply",
+      "Discover Our Culture": "#culture",
+      "I'm a Licensed Loan Officer": "/careers?pathway=licensed#apply",
+      "I'm Exploring a Mortgage Career": "/careers?pathway=aspiring#apply",
+      "Apply Now": "#apply",
+    };
+    for (const [name, href] of Object.entries(careerLinks)) {
+      const link = main.getByRole("link", { name: new RegExp(`^${name}`) });
+      if ((await link.count()) !== 1) fail(`${v}: careers "${name}" found ${await link.count()} times`);
+      else if ((await link.getAttribute("href")) !== href)
+        fail(`${v}: careers "${name}" -> ${await link.getAttribute("href")}`);
+    }
+    for (const id of ["apply", "culture"])
+      if ((await page.locator(`#${id}`).count()) !== 1) fail(`${v}: careers #${id} target missing`);
+    if ((await main.locator('input[type="file"]').count()) !== 0) fail(`${v}: careers has a file upload`);
+    const names = await main
+      .locator("form input, form select, form textarea")
+      .evaluateAll((els) => els.map((e) => e.getAttribute("name") ?? ""));
+    if (names.some((n) => /loan|property|income|ssn|social|credit|down|asset|birth/i.test(n)))
+      fail(`${v}: careers form has mortgage fields: ${names.join(",")}`);
+    const small = await main
+      .locator("form input:not([type=radio]):not([type=checkbox]), form select, form textarea")
+      .evaluateAll(
+        (els) => els.filter((e) => e.offsetParent && parseFloat(getComputedStyle(e).fontSize) < 16).length,
+      );
+    if (small) fail(`${v}: ${small} careers inputs below 16px (iOS zoom)`);
+    const tiny = await main
+      .locator(
+        "form input:not([type=radio]):not([type=checkbox]):not([name=company_website]), form select, form button",
+      )
+      .evaluateAll(
+        (els) => els.filter((e) => e.offsetParent && e.getBoundingClientRect().height < 44).length,
+      );
+    if (tiny) fail(`${v}: ${tiny} careers controls shorter than 44px`);
+
+    // Hero CTA scrolls to the form.
+    await main.getByRole("link", { name: /^Apply to Join Our Team/ }).click();
+    await page.waitForTimeout(400);
+    const formTop = await page.locator("#apply").evaluate((el) => el.getBoundingClientRect().top);
+    if (Math.abs(formTop) > 120) fail(`${v}: Apply CTA did not scroll to the form (top ${formTop})`);
+
+    // Pathway CTAs preselect the category.
+    for (const [name, value] of [
+      ["I'm a Licensed Loan Officer", "licensed"],
+      ["I'm Exploring a Mortgage Career", "aspiring"],
+    ]) {
+      await main.getByRole("link", { name: new RegExp(`^${name}`) }).click();
+      await page
+        .waitForURL(new RegExp(`pathway=${value}`))
+        .catch(() => fail(`${v}: "${name}" did not navigate`));
+      await page.waitForTimeout(300);
+      const selected = await page.locator("#rf-pathway").inputValue();
+      if (selected !== value) fail(`${v}: "${name}" preselected "${selected}", expected "${value}"`);
+    }
+    // A direct visit with the parameter also preselects.
+    await page.goto(BASE + "/careers?pathway=licensed#apply", { waitUntil: "networkidle" });
+    if ((await page.locator("#rf-pathway").inputValue()) !== "licensed")
+      fail(`${v}: direct ?pathway=licensed did not preselect`);
+
+    // Empty submission is rejected client-side; no request is sent.
+    let posted = 0;
+    const onReq = (r) => r.url().includes("/api/recruitment") && posted++;
+    page.on("request", onReq);
+    await page.getByRole("button", { name: "Submit Inquiry" }).click();
+    const summary = page.getByTestId("recruitment-error-summary");
+    if (!(await summary.isVisible())) fail(`${v}: empty careers submission not rejected`);
+    if (!(await summary.evaluate((el) => el === document.activeElement)))
+      fail(`${v}: error summary not focused`);
+    // Invalid email rejected; NMLS ID is not required.
+    await page.locator("#rf-email").fill("jordan@example");
+    await page.getByRole("button", { name: "Submit Inquiry" }).click();
+    const errText = await summary.innerText();
+    if (!/valid email/i.test(errText)) fail(`${v}: invalid email not rejected`);
+    if (/NMLS/i.test(errText)) fail(`${v}: NMLS ID treated as required`);
+    if (posted) fail(`${v}: invalid careers form was sent to the server`);
+    page.off("request", onReq);
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+    if (overflow > 0) fail(`${v}: careers overflow ${overflow}px with errors shown`);
+    await axe(page, `${v} /careers (errors shown)`);
+  }
+
   if (errors.length) fail(`${viewport.name}: console errors: ${[...new Set(errors)].join(" | ")}`);
   await context.close();
 }
@@ -505,5 +593,5 @@ if (failures.length) {
 }
 console.log(
   `PASS: ${routes.length} routes x ${viewports.length} viewports (${viewports.map((v) => v.width).join("/")}), ` +
-    "header/drawer keyboard + scroll lock, footer links, logo scaling, axe (WCAG 2.1 AA + best practice), motion, robots/sitemap",
+    "header/drawer keyboard + scroll lock, footer links, logo scaling, careers CTAs/preselection/validation, axe (WCAG 2.1 AA + best practice), motion, robots/sitemap",
 );
