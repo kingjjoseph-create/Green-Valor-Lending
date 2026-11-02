@@ -345,6 +345,76 @@ for (const viewport of viewports) {
     await axe(page, `${viewport.name} /non-qm (FAQ open)`);
   }
 
+  // Resources: calculator works in a real browser without reloads, FAQ search filters, links route.
+  {
+    await page.goto(BASE + "/resources");
+    const main = page.locator("main");
+    await page.evaluate(() => (window.__noReload = true));
+    const fill = (label, value) => main.getByLabel(label).fill(value);
+    await fill(/home purchase price/i, "375000");
+    await fill(/down payment \(dollars\)/i, "75000");
+    await fill(/interest rate/i, "6.5");
+    const totalText = await main.getByTestId("calculator-total").textContent();
+    if (totalText !== "$1,896.20")
+      fail(`${viewport.name}: calculator total ${totalText}, expected $1,896.20`);
+    await fill(/property taxes per year/i, "4800");
+    if ((await main.getByTestId("calculator-total").textContent()) !== "$2,296.20")
+      fail(`${viewport.name}: calculator did not add taxes live`);
+    if (!(await page.evaluate(() => window.__noReload === true)))
+      fail(`${viewport.name}: calculator reloaded the page`);
+    // Mobile usability: 16px+ inputs (no iOS zoom), 44px+ targets, numeric keyboard.
+    for (const input of await main
+      .locator('form[aria-label="Mortgage payment calculator"] input[type=text]')
+      .all()) {
+      const m = await input.evaluate((el) => ({
+        fs: parseFloat(getComputedStyle(el).fontSize),
+        h: el.getBoundingClientRect().height,
+        im: el.inputMode,
+      }));
+      if (m.fs < 16 || m.h < 44 || m.im !== "decimal")
+        fail(`${viewport.name}: calculator input not mobile-friendly ${JSON.stringify(m)}`);
+    }
+    for (const radio of ["Dollars", "Percent"]) {
+      const box = await main.getByRole("radio", { name: radio }).locator("xpath=..").boundingBox();
+      if (!box || box.height < 36 || box.width < 44)
+        fail(`${viewport.name}: down payment toggle "${radio}" too small`);
+    }
+    await fill(/interest rate/i, "-1");
+    if ((await main.getByLabel(/interest rate/i).getAttribute("aria-invalid")) !== "true")
+      fail(`${viewport.name}: negative rate not flagged`);
+    await axe(page, `${viewport.name} /resources (calculator filled, error shown)`);
+    await fill(/interest rate/i, "6.5");
+
+    const search = main.getByRole("searchbox", { name: "Search questions" });
+    await search.fill("escrow");
+    const count = await main.getByTestId("faq-count").textContent();
+    if (!/^\d+ of \d+ questions$/.test(count)) fail(`${viewport.name}: FAQ search did not filter (${count})`);
+    await search.fill("zzzz");
+    if (!(await main.getByText("No questions match your search.").isVisible()))
+      fail(`${viewport.name}: FAQ empty state missing`);
+    await main.getByRole("button", { name: "Clear search" }).click();
+    await main.getByRole("button", { name: "The process" }).click();
+    if ((await main.getByRole("button", { name: "The process" }).getAttribute("aria-pressed")) !== "true")
+      fail(`${viewport.name}: FAQ category not pressed`);
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+    if (overflow > 0) fail(`${viewport.name}: resources overflow ${overflow}px after interaction`);
+    await axe(page, `${viewport.name} /resources (FAQ filtered)`);
+
+    const resLinks = {
+      "Learn about residential loans": "/residential-loans",
+      "Learn about Non-QM loans": "/non-qm",
+      "Speak With Our Team": "/contact",
+      "Payment calculator": "#calculator",
+    };
+    for (const [name, href] of Object.entries(resLinks)) {
+      const link = main.getByRole("link", { name: new RegExp(name) });
+      if ((await link.count()) !== 1)
+        fail(`${viewport.name}: resources "${name}" found ${await link.count()} times`);
+      else if ((await link.getAttribute("href")) !== href)
+        fail(`${viewport.name}: resources "${name}" -> ${await link.getAttribute("href")}`);
+    }
+  }
+
   if (errors.length) fail(`${viewport.name}: console errors: ${[...new Set(errors)].join(" | ")}`);
   await context.close();
 }

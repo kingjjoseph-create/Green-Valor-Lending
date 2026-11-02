@@ -47,6 +47,10 @@
 
 **Done:** `/non-qm` with a green hero, the "What is Non-QM?" overview, Bank Statement / DSCR / 1099 program cards, an "Other alternative documentation options" panel that lists no products until verified, who may benefit, a Traditional vs. Non-QM comparison (table on desktop, stacked cards on mobile), a five-step process, six FAQs, and the CTA. Copy is in `src/content/non-qm.ts`. New: `components/loans/comparison-table.tsx` and the `lib/keep-together.tsx` no-wrap helper. Review is in `docs/visual-review/NON_QM_REVIEW.md`.
 
+## Phase 6: Borrower Resources page (2026-11-02)
+
+**Done:** `/resources` with a live mortgage payment calculator (`src/lib/mortgage.ts` and `components/resources/mortgage-calculator.tsx`), eight mortgage-basics accordions, two loan-option cards, a five-step process, a searchable and categorized FAQ (`components/resources/searchable-faq.tsx`), and the CTA. The calculator flag `NEXT_PUBLIC_FEATURE_CALCULATORS` now defaults to on, which also removes the homepage "Coming soon" badge. Review is in `docs/visual-review/RESOURCES_REVIEW.md`.
+
 **Placeholders to remove before launch** (search `data-placeholder`)
 
 - `PhasePlaceholder` blocks on interior pages

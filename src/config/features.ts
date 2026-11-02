@@ -11,8 +11,8 @@ function flag(value: string | undefined, fallback: boolean): boolean {
 export const featureFlags = {
   /** Allow search engines to index the site. Keep OFF until launch sign-off. */
   allowIndexing: flag(process.env.NEXT_PUBLIC_ALLOW_INDEXING, false),
-  /** Mortgage calculators (illustrative only, no live rates). Built in a later phase. */
-  calculators: flag(process.env.NEXT_PUBLIC_FEATURE_CALCULATORS, false),
+  /** Mortgage payment calculator on /resources (user-entered rates only, no live rates). */
+  calculators: flag(process.env.NEXT_PUBLIC_FEATURE_CALCULATORS, true),
   /** Lead capture forms. Require a configured CRM before enabling. */
   leadForms: flag(process.env.NEXT_PUBLIC_FEATURE_LEAD_FORMS, false),
   /** Loan officer recruiting application on /careers. */

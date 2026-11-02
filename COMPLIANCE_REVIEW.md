@@ -37,6 +37,7 @@
 - [ ] Homepage government non-affiliation statement (VA / FHA) wording
 - [ ] Residential page (`src/content/residential.ts`): review program descriptions (Conventional, FHA, VA), the FAQ answers (preapproval, mortgage insurance, closing costs including Florida documentary stamp and intangible taxes, TRID timing), and the VA/FHA/HUD non-affiliation statements. Down-payment amounts and percentages are deliberately left out (Reg Z 1026.24(d) trigger terms).
 - [ ] Non-QM page (`src/content/non-qm.ts`): confirm Bank Statement, DSCR, and 1099 programs are currently available through a wholesale partner before launch, or remove the card. Review the QM/ability-to-repay explanation, the comparison table, and the FAQ answers. The page states no thresholds (scores, ratios, months of statements, down payment, reserves) or rates.
+- [ ] Resources page: review the calculator disclaimer and assumptions, and confirm that a blank, user-entered rate is acceptable (no default rate is shown). Review the mortgage-basics and FAQ answers (credit inquiries, discount points, rate locks, escrow, TRID timing).
 - [ ] Before listing anything under "Other Residential Options", verify current availability with a wholesale lending partner (`verifiedPrograms` array)
 
 ## Safeguards
