@@ -8,6 +8,24 @@
 4. Keep `NEXT_PUBLIC_ALLOW_INDEXING=false` on Preview and on Production until launch sign-off.
 5. Deploy. Every pull request gets a Preview deployment.
 
+## Contact form (/contact)
+
+The contact form posts to `/api/contact`. Configure at least one delivery channel as **server-only** variables:
+
+| Variable                                                 | Purpose                                                                                                                                                                                                 |
+| -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CONTACT_WEBHOOK_URL`                                    | CRM or automation endpoint. Receives a JSON `contact_inquiry` record classified as `mortgage_inquiry` (Residential, Non-QM; `crm.leadType: "borrower"`) or `general_inquiry` (General Question, Other). |
+| `CONTACT_WEBHOOK_SECRET`                                 | Optional HMAC signature, same format as the recruitment webhook.                                                                                                                                        |
+| `RESEND_API_KEY`, `CONTACT_EMAIL_FROM`                   | Email notification through Resend (verified sending domain required).                                                                                                                                   |
+| `CONTACT_EMAIL_TO`                                       | General inbox. Falls back to `NEXT_PUBLIC_COMPANY_EMAIL`.                                                                                                                                               |
+| `CONTACT_MORTGAGE_EMAIL_TO`                              | Optional inbox for Residential and Non-QM inquiries.                                                                                                                                                    |
+| `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY` | Optional Cloudflare Turnstile challenge. Set both, or neither.                                                                                                                                          |
+
+- "Career Opportunity" never goes through this endpoint: the form sends visitors to the Careers recruitment form, and the server rejects it with 422.
+- Spam protection: honeypot, minimum fill time, optional Turnstile, per-IP rate limit (5 per 10 minutes per instance), and duplicate suppression (the same message from the same email within 10 minutes is acknowledged once, not delivered twice).
+- With no channel configured the endpoint returns 503 and the form says online messages are unavailable. Success shows only after a channel accepts the message.
+- Business hours (`NEXT_PUBLIC_BUSINESS_HOURS`) and the office address (`NEXT_PUBLIC_PUBLISH_OFFICE_ADDRESS=true` plus street, city, state, ZIP) appear only when supplied. Never enter a placeholder address.
+
 ## Recruitment inquiries (/careers)
 
 The careers form posts to its own endpoint, `/api/recruitment`, which is separate from any borrower inquiry flow. Each submission is sent as a `recruitment_inquiry` record (category `careers`), never as a borrower lead. Configure at least one delivery channel as **server-only** variables (no `NEXT_PUBLIC_` prefix, never committed):
@@ -29,6 +47,7 @@ The careers form posts to its own endpoint, `/api/recruitment`, which is separat
 
 - [ ] All items in COMPLIANCE_REVIEW.md resolved
 - [ ] No `data-placeholder` elements remain
+- [ ] Contact delivery configured and a test message received in the right inbox
 - [ ] Recruitment delivery configured and a test inquiry received end to end
 - [ ] Official logos and favicon in place
 - [ ] `NEXT_PUBLIC_SITE_URL` set to the production domain; custom domain configured in Vercel

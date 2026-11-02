@@ -34,6 +34,7 @@
 - [ ] Non-QM product descriptions reviewed against actual wholesale partner availability
 - [ ] Recruiting copy reviewed (no income claims)
 - [ ] Careers page (`src/content/careers.ts`): review the licensing statement for aspiring originators, the "no guarantee of employment, sponsorship or training placement" language, and the growth-card bullets (education, marketing guidance, business development support). Confirm with leadership before adding any compensation, commission, lead, tool, mentorship schedule or reimbursement detail.
+- [ ] Contact page: approve the consent acknowledgment (email/phone contact about the inquiry; not an application; no rate lock or approval). It does not cover autodialed calls or texts; add TCPA-compliant consent before any SMS or automated calling. Confirm the business hours and whether the office address may be published.
 - [ ] Recruitment form: review the consent acknowledgment and confirm the Privacy Policy covers applicant data (purpose, retention, where the webhook/email delivers it). Resume uploads are intentionally omitted until a secure recruiting system is chosen.
 - [ ] Homepage (`src/content/home.ts`): confirm the example programs (Conventional, FHA, VA, Bank Statement, DSCR, 1099, Alternative Documentation) are available through current wholesale partners. They are presented as "may include" with an availability disclaimer.
 - [ ] Homepage government non-affiliation statement (VA / FHA) wording
@@ -44,6 +45,8 @@
 - [ ] Before listing anything under "Other Residential Options", verify current availability with a wholesale lending partner (`verifiedPrograms` array)
 
 ## Safeguards
+
+- Contact inquiries go only to `/api/contact`, classified `mortgage_inquiry` (borrower) or `general_inquiry`; career inquiries are refused there and routed to `/careers`. No contact detail renders unless configured, and the address also needs explicit approval (test-enforced).
 
 - Recruitment inquiries go only to `/api/recruitment` and are labeled `recruitment_inquiry` / `careers`, never as borrower leads. Server-side validation, same-origin check, size and rate limits, honeypot, no applicant data in logs, and no success message unless delivery is confirmed (test-enforced).
 
