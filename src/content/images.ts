@@ -81,5 +81,15 @@ export const images: Record<ImageSlot, ImageAsset | null> = {
   },
   officeSetting: null,
   businessMeeting: null,
-  teamTraining: null,
+  teamTraining: {
+    src: "/images/loan-officers.jpg",
+    width: 2400,
+    height: 1800,
+    alt: "Silhouettes of professionals talking in small groups in front of a softly lit glass wall",
+    license: {
+      source: "Supplied by Green Valor (AI-generated image, upscaled)",
+      licenseName: "Owned by Green Valor (generator terms to be confirmed)",
+      acquired: "2026-11-25",
+    },
+  },
 };
