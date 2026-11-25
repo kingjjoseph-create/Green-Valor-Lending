@@ -14,8 +14,6 @@ type PageHeroProps = {
   actions?: React.ReactNode;
   /** Optional licensed photo; pass `null` to reserve the image column before a photo exists. */
   image?: ImageAsset | null;
-  /** Tint the photo with the brand-green overlay used on the homepage hero video. */
-  imageOverlay?: boolean;
   tone?: "ivory" | "green";
   /** "home" uses the larger hero type scale. */
   size?: "page" | "home";
@@ -29,7 +27,6 @@ export function PageHero({
   breadcrumbs,
   actions,
   image,
-  imageOverlay = false,
   tone = "ivory",
   size = "page",
 }: PageHeroProps) {
@@ -54,7 +51,6 @@ export function PageHero({
           <ResponsiveImage
             image={image}
             aspect="4/3"
-            overlay={imageOverlay}
             priority
             sizes="(min-width: 1024px) 50vw, 100vw"
             // Until a licensed photo exists, the empty frame is shown on large screens only.

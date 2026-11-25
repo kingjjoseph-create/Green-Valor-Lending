@@ -19,7 +19,11 @@ type ResponsiveImageProps = {
   priority?: boolean;
   /** Override the registry alt text; pass "" for a purely decorative image. */
   alt?: string;
-  /** Lays a translucent brand-green tint over the photo (matches the homepage hero video). */
+  /**
+   * Translucent brand-green tint over the photo, matching the homepage hero
+   * video. On by default so every site photo shares one look; pass `false`
+   * where a tint would be wrong (e.g. staff portraits).
+   */
   overlay?: boolean;
   className?: string;
 };
@@ -35,7 +39,7 @@ export function ResponsiveImage({
   sizes = "(min-width: 1024px) 50vw, 100vw",
   priority,
   alt,
-  overlay = false,
+  overlay = true,
   className,
 }: ResponsiveImageProps) {
   return (
