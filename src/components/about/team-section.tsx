@@ -25,6 +25,8 @@ export function TeamCard({ member }: { member: TeamMember }) {
           aspect="4/5"
           sizes="(min-width: 1024px) 25vw, (min-width: 640px) 45vw, 100vw"
           alt={`Portrait of ${member.name}`}
+          // No brand tint on people's portraits: it would distort skin tones.
+          overlay={false}
         />
       ) : (
         <div

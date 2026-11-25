@@ -122,7 +122,7 @@ describe("content components", () => {
     expect(container.querySelector("img")).toBeNull();
   });
 
-  it("ResponsiveImage adds a decorative brand-green overlay only when asked and a photo exists", () => {
+  it("ResponsiveImage tints photos brand green by default, unless turned off", () => {
     const photo = {
       src: "/images/x.jpg" as const,
       width: 4,
@@ -130,18 +130,18 @@ describe("content components", () => {
       alt: "A photo",
       license: { source: "Test", licenseName: "Test", acquired: "2026-11-25" },
     };
-    const plain = render(<ResponsiveImage image={photo} />);
+    const plain = render(<ResponsiveImage image={photo} overlay={false} />);
     expect(plain.container.querySelector('[data-overlay="brand"]')).toBeNull();
     plain.unmount();
 
-    const tinted = render(<ResponsiveImage image={photo} overlay />);
+    const tinted = render(<ResponsiveImage image={photo} />);
     const tint = tinted.container.querySelector('[data-overlay="brand"]');
     expect(tint).toHaveAttribute("aria-hidden", "true");
     expect(tint).toHaveClass("bg-gv-green/35");
     expect(screen.getByAltText("A photo")).toBeInTheDocument();
     tinted.unmount();
 
-    const empty = render(<ResponsiveImage image={null} overlay />);
+    const empty = render(<ResponsiveImage image={null} />);
     expect(empty.container.querySelector('[data-overlay="brand"]')).toBeNull();
   });
 
