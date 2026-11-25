@@ -60,7 +60,17 @@ export const imageBriefs: Record<ImageSlot, string> = {
 
 export const images: Record<ImageSlot, ImageAsset | null> = {
   homeHero: null,
-  residentialHero: null,
+  residentialHero: {
+    src: "/images/residential-bathroom.jpg",
+    width: 2400,
+    height: 1800,
+    alt: "White vessel sink and chrome faucet on a marble vanity, framed by hydrangeas and greenery",
+    license: {
+      source: "Supplied by Green Valor (appears to be a stock image)",
+      licenseName: "To be confirmed by Green Valor",
+      acquired: "2026-11-25",
+    },
+  },
   nonQmHero: null,
   resourcesHero: null,
   aboutHero: null,

@@ -19,6 +19,8 @@ type ResponsiveImageProps = {
   priority?: boolean;
   /** Override the registry alt text; pass "" for a purely decorative image. */
   alt?: string;
+  /** Lays a translucent brand-green tint over the photo (matches the homepage hero video). */
+  overlay?: boolean;
   className?: string;
 };
 
@@ -33,6 +35,7 @@ export function ResponsiveImage({
   sizes = "(min-width: 1024px) 50vw, 100vw",
   priority,
   alt,
+  overlay = false,
   className,
 }: ResponsiveImageProps) {
   return (
@@ -55,6 +58,13 @@ export function ResponsiveImage({
           <div className="absolute inset-6 rounded-lg border border-gv-gold/30" />
           <div className="absolute right-6 bottom-6 left-6 h-px bg-gv-gold/40" />
         </div>
+      )}
+      {image && overlay && (
+        <div
+          data-overlay="brand"
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 bg-gv-green/35"
+        />
       )}
     </div>
   );

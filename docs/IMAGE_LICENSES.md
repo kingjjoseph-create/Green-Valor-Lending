@@ -4,7 +4,7 @@ Every photograph on the site must be properly licensed, stored locally in `publi
 
 ## Current status
 
-One photo is in place (`floridaHome`, shown in the homepage Borrower Education section). Every other slot in `src/content/images.ts` is `null`, so components show a neutral decorative brand panel marked `data-placeholder="image"`.
+Two photos are in place: `floridaHome` (homepage Borrower Education section) and `residentialHero` (Residential Loans page hero). Every other slot in `src/content/images.ts` is `null`, so components show a neutral decorative brand panel marked `data-placeholder="image"`.
 
 ## Photo brief (one per slot)
 
@@ -27,10 +27,11 @@ Avoid images showing identifiable people with captions or context implying they 
 
 ## License log
 
-| File                                                                 | Slot            | Source                                                               | License                                                               | Attribution required    | Acquired   | Record                                                                              |
-| -------------------------------------------------------------------- | --------------- | -------------------------------------------------------------------- | --------------------------------------------------------------------- | ----------------------- | ---------- | ----------------------------------------------------------------------------------- |
-| `public/images/florida-home.jpg`                                     | floridaHome     | Unsplash, Maxim Simonov (photo Di4DCF3COu4), supplied by Green Valor | [Unsplash License](https://unsplash.com/license): free commercial use | No (credit appreciated) | 2026-11-02 | Cropped to 4:3 and resized to 2400×1800                                             |
-| `public/videos/home-hero.mp4`, `public/videos/home-hero-poster.webp` | Home hero video | Supplied by Green Valor Lending (2026-11-02)                         | To be confirmed by Green Valor                                        | To be confirmed         | 2026-11-02 | Confirm the commercial license and model releases for the identifiable people shown |
+| File                                                                 | Slot            | Source                                                                 | License                                                               | Attribution required    | Acquired   | Record                                                                                                                                             |
+| -------------------------------------------------------------------- | --------------- | ---------------------------------------------------------------------- | --------------------------------------------------------------------- | ----------------------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `public/images/florida-home.jpg`                                     | floridaHome     | Unsplash, Maxim Simonov (photo Di4DCF3COu4), supplied by Green Valor   | [Unsplash License](https://unsplash.com/license): free commercial use | No (credit appreciated) | 2026-11-02 | Cropped to 4:3 and resized to 2400×1800                                                                                                            |
+| `public/images/residential-bathroom.jpg`                             | residentialHero | Supplied by Green Valor (2026-11-25); file name suggests a stock image | To be confirmed by Green Valor                                        | To be confirmed         | 2026-11-25 | Cropped to 4:3 and resized to 2400×1800. Confirm the source and commercial license (if it came from a stock site, record the asset ID and license) |
+| `public/videos/home-hero.mp4`, `public/videos/home-hero-poster.webp` | Home hero video | Supplied by Green Valor Lending (2026-11-02)                           | To be confirmed by Green Valor                                        | To be confirmed         | 2026-11-02 | Confirm the commercial license and model releases for the identifiable people shown                                                                |
 
 ## Adding a photo
 
