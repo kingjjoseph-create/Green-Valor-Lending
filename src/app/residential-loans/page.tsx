@@ -54,6 +54,7 @@ export default function ResidentialLoansPage() {
         title={hero.title}
         description={hero.description}
         image={images.residentialHero}
+        imageOverlay
         actions={<CTAButton href={hero.cta.href}>{hero.cta.label}</CTAButton>}
       />
 

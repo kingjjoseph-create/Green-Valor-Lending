@@ -122,6 +122,29 @@ describe("content components", () => {
     expect(container.querySelector("img")).toBeNull();
   });
 
+  it("ResponsiveImage adds a decorative brand-green overlay only when asked and a photo exists", () => {
+    const photo = {
+      src: "/images/x.jpg" as const,
+      width: 4,
+      height: 3,
+      alt: "A photo",
+      license: { source: "Test", licenseName: "Test", acquired: "2026-11-25" },
+    };
+    const plain = render(<ResponsiveImage image={photo} />);
+    expect(plain.container.querySelector('[data-overlay="brand"]')).toBeNull();
+    plain.unmount();
+
+    const tinted = render(<ResponsiveImage image={photo} overlay />);
+    const tint = tinted.container.querySelector('[data-overlay="brand"]');
+    expect(tint).toHaveAttribute("aria-hidden", "true");
+    expect(tint).toHaveClass("bg-gv-green/35");
+    expect(screen.getByAltText("A photo")).toBeInTheDocument();
+    tinted.unmount();
+
+    const empty = render(<ResponsiveImage image={null} overlay />);
+    expect(empty.container.querySelector('[data-overlay="brand"]')).toBeNull();
+  });
+
   it("SectionHeading uses the requested heading level", () => {
     render(<SectionHeading as="h2" title="Title" eyebrow="Eyebrow" />);
     expect(screen.getByRole("heading", { level: 2, name: "Title" })).toBeInTheDocument();
